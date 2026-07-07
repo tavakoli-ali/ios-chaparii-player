@@ -64,6 +64,7 @@ struct ContentView: View {
     @State private var windowDelegate = WindowDelegate()
     @State private var shouldFocusSearch = false
     @State private var showingExportPlaylistSheet = false
+    @State private var tagEditSession: TagEditSession?
 
     // Sidebar selection state (owned here, passed as bindings to sidebars + content views)
     @State private var selectedHomeSidebarItem: HomeSidebarItem?
@@ -209,6 +210,15 @@ struct ContentView: View {
         .sheet(item: $libraryManager.pendingMergeRequest) { request in
             MergeEntitySheet(request: request)
                 .environmentObject(libraryManager)
+        }
+        .sheet(item: $tagEditSession) { session in
+            TagEditorSheet(tracks: session.tracks)
+                .environmentObject(libraryManager)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("EditTrackTags"))) { notification in
+            if let tracks = notification.userInfo?["tracks"] as? [Track], !tracks.isEmpty {
+                tagEditSession = TagEditSession(tracks: tracks)
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .importPlaylists)) { _ in
             importPlaylists()

@@ -17,22 +17,24 @@ enum TrackContextMenu {
         
         // Add info item
         items.append(createShowInfoItem(for: track))
-        
+
+        items.append(createEditTagsItem(for: [track]))
+
         items.append(createRevealInFinderItem(for: track))
-        
+
         items.append(.divider)
-        
+
         // Add "Go to" submenu
         items.append(createGoToMenu(for: track))
-        
+
         items.append(.divider)
-        
+
         // Add playlist items
         items.append(contentsOf: createPlaylistItems(
             for: track,
             playlistManager: playlistManager
         ))
-        
+
         // Add context-specific items
         items.append(contentsOf: createContextSpecificItems(
             for: track,
@@ -62,9 +64,13 @@ enum TrackContextMenu {
             for: tracks,
             playlistManager: playlistManager
         ))
-        
+
         items.append(.divider)
-        
+
+        items.append(createEditTagsItem(for: tracks))
+
+        items.append(.divider)
+
         items.append(contentsOf: createBulkPlaylistItems(
             for: tracks,
             playlistManager: playlistManager,
@@ -177,6 +183,16 @@ enum TrackContextMenu {
         }
     }
     
+    private static func createEditTagsItem(for tracks: [Track]) -> ContextMenuItem {
+        .button(title: String(localized: "Edit Tags…"), icon: "square.and.pencil") {
+            NotificationCenter.default.post(
+                name: NSNotification.Name("EditTrackTags"),
+                object: nil,
+                userInfo: ["tracks": tracks]
+            )
+        }
+    }
+
     private static func createRevealInFinderItem(for track: Track) -> ContextMenuItem {
         .button(title: String(localized: "Reveal in Finder"), icon: "finder") {
             NSWorkspace.shared.selectFile(track.url.path, inFileViewerRootedAtPath: "")
