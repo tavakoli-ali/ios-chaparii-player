@@ -65,6 +65,7 @@ struct ContentView: View {
     @State private var shouldFocusSearch = false
     @State private var showingExportPlaylistSheet = false
     @State private var tagEditSession: TagEditSession?
+    @State private var spotifyDownloadSession: SpotifyDownloadSession?
 
     // Sidebar selection state (owned here, passed as bindings to sidebars + content views)
     @State private var selectedHomeSidebarItem: HomeSidebarItem?
@@ -218,6 +219,15 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("EditTrackTags"))) { notification in
             if let tracks = notification.userInfo?["tracks"] as? [Track], !tracks.isEmpty {
                 tagEditSession = TagEditSession(tracks: tracks)
+            }
+        }
+        .sheet(item: $spotifyDownloadSession) { session in
+            SpotifyDownloadSheet(track: session.track)
+                .environmentObject(libraryManager)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ShowSpotifyDownload"))) { notification in
+            if let track = notification.userInfo?["track"] as? Track {
+                spotifyDownloadSession = SpotifyDownloadSession(track: track)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .importPlaylists)) { _ in

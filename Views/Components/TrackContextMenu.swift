@@ -24,6 +24,10 @@ enum TrackContextMenu {
 
         items.append(.divider)
 
+        items.append(createSpotifyDownloadItem(for: track))
+
+        items.append(.divider)
+
         // Add "Go to" submenu
         items.append(createGoToMenu(for: track))
 
@@ -189,6 +193,16 @@ enum TrackContextMenu {
                 name: NSNotification.Name("EditTrackTags"),
                 object: nil,
                 userInfo: ["tracks": tracks]
+            )
+        }
+    }
+
+    private static func createSpotifyDownloadItem(for track: Track) -> ContextMenuItem {
+        .button(title: String(localized: "Download from Spotify…"), icon: "arrow.down.circle") {
+            NotificationCenter.default.post(
+                name: NSNotification.Name("ShowSpotifyDownload"),
+                object: nil,
+                userInfo: ["track": track]
             )
         }
     }
