@@ -20,6 +20,8 @@ enum TrackContextMenu {
 
         items.append(createEditTagsItem(for: [track]))
 
+        items.append(createOnlineTagUpdateItem(for: [track]))
+
         items.append(createRevealInFinderItem(for: track))
 
         items.append(.divider)
@@ -72,6 +74,8 @@ enum TrackContextMenu {
         items.append(.divider)
 
         items.append(createEditTagsItem(for: tracks))
+
+        items.append(createOnlineTagUpdateItem(for: tracks))
 
         items.append(.divider)
 
@@ -191,6 +195,16 @@ enum TrackContextMenu {
         .button(title: String(localized: "Edit Tags…"), icon: "square.and.pencil") {
             NotificationCenter.default.post(
                 name: NSNotification.Name("EditTrackTags"),
+                object: nil,
+                userInfo: ["tracks": tracks]
+            )
+        }
+    }
+
+    private static func createOnlineTagUpdateItem(for tracks: [Track]) -> ContextMenuItem {
+        .button(title: String(localized: "Update Tags from Internet…"), icon: "globe") {
+            NotificationCenter.default.post(
+                name: NSNotification.Name("UpdateTagsOnline"),
                 object: nil,
                 userInfo: ["tracks": tracks]
             )

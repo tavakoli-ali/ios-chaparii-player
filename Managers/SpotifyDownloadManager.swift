@@ -56,6 +56,9 @@ final class SpotifyDownloadManager: ObservableObject {
     @Published var logLines: [String] = []
 
     private var process: Process?
+    /// Distinguishes a user-requested terminate from the process dying on its
+    /// own (crash, sandbox kill, …) — only the former should end up as .idle.
+    private var userCancelled = false
 
     var hasCredentials: Bool {
         KeychainManager.retrieve(key: KeychainKeys.clientId)?.isEmpty == false &&
@@ -75,6 +78,7 @@ final class SpotifyDownloadManager: ObservableObject {
     func start(mode: Mode, query: String, destination: URL, onSuccess: @escaping () -> Void) {
         guard !phase.isBusy else { return }
         logLines = []
+        userCancelled = false
 
         Task {
             do {
@@ -104,6 +108,7 @@ final class SpotifyDownloadManager: ObservableObject {
     }
 
     func cancel() {
+        userCancelled = true
         process?.terminate()
         process = nil
         phase = .idle
@@ -208,15 +213,28 @@ final class SpotifyDownloadManager: ObservableObject {
                 accumulator.append((try? pipe.fileHandleForReading.readToEnd()) ?? Data())
                 accumulator.flush()
 
+                let signalled = finished.terminationReason == .uncaughtSignal
+                let status = finished.terminationStatus
                 Task { @MainActor [weak self] in
                     self?.process = nil
-                }
-                if finished.terminationReason == .uncaughtSignal {
-                    continuation.resume(throwing: CancellationError())
-                } else if finished.terminationStatus == 0 {
-                    continuation.resume(returning: accumulator.downloadedCount)
-                } else {
-                    continuation.resume(throwing: SpotifyDownloadError.spotdlFailed(finished.terminationStatus))
+                    guard let self else {
+                        continuation.resume(throwing: CancellationError())
+                        return
+                    }
+                    if signalled {
+                        // SIGTERM from Cancel is expected; anything else means
+                        // the process was killed (crash, sandbox, out of memory)
+                        // and must surface as a failure, not end silently.
+                        if self.userCancelled {
+                            continuation.resume(throwing: CancellationError())
+                        } else {
+                            continuation.resume(throwing: SpotifyDownloadError.spotdlKilled(status))
+                        }
+                    } else if status == 0 {
+                        continuation.resume(returning: accumulator.downloadedCount)
+                    } else {
+                        continuation.resume(throwing: SpotifyDownloadError.spotdlFailed(status))
+                    }
                 }
             }
 
@@ -290,6 +308,7 @@ enum SpotifyDownloadError: LocalizedError {
     case missingCredentials
     case nothingFound
     case spotdlFailed(Int32)
+    case spotdlKilled(Int32)
     case apiFailure(String)
 
     var errorDescription: String? {
@@ -304,6 +323,8 @@ enum SpotifyDownloadError: LocalizedError {
             return String(localized: "No match found on Spotify.")
         case .spotdlFailed(let code):
             return String(localized: "spotdl exited with code \(code). See the log for details.")
+        case .spotdlKilled(let signal):
+            return String(localized: "spotdl was terminated by the system (signal \(signal)).")
         case .apiFailure(let message):
             return String(localized: "Spotify API error: \(message)")
         }
