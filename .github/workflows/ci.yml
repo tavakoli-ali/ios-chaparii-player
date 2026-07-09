@@ -38,8 +38,9 @@ env:
   # Pinned and bumped deliberately; matches the local/ship toolchain. The
   # SwiftLint image tag in the lint job is the single lint-version pin.
   XCODE_VERSION: '26.5'
-  SCHEME: 'Petrichor'
-  PROJECT: 'Petrichor.xcodeproj'
+  SCHEME: 'Chaparii-Player'
+  PROJECT: 'Chaparii-Player.xcodeproj'
+  IOS_SCHEME: 'Chaparii-iOS'
 
 jobs:
   # Fast, free Linux gate via the official SwiftLint container. Runs first; the
@@ -147,6 +148,83 @@ jobs:
           retention-days: 5
           if-no-files-found: ignore
 
+  # iOS simulator compile + analyze. The iOS app shares the core (Models/GRDB/
+  # SFBAudioEngine playback) with the macOS target, so this guards the shared code
+  # against iOS-only breaks (platform fencing, unavailable APIs) on every change.
+  build-analyze-ios:
+    name: Build & Analyze (iOS Debug)
+    runs-on: macos-26
+    timeout-minutes: 45
+    needs: [lint, actionlint]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Select Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app"
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v5
+        with:
+          path: .spm
+          key: ${{ runner.os }}-spm-ios-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-ios-
+
+      - name: Cache DerivedData
+        uses: actions/cache@v5
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-dd-ios-debug-${{ hashFiles('**/*.swift', '**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-dd-ios-debug-
+
+      - name: Create Secrets placeholder
+        run: |
+          {
+            echo "// CI placeholder - online features disabled"
+            echo "LASTFM_API_KEY = "
+            echo "LASTFM_SHARED_SECRET = "
+          } > Configuration/Secrets.xcconfig
+
+      - name: Ensure xcbeautify
+        run: brew list xcbeautify >/dev/null 2>&1 || brew install xcbeautify
+
+      - name: Resolve dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$IOS_SCHEME" \
+            -clonedSourcePackagesDirPath .spm
+
+      # Generic simulator destination (no device pin) so it survives runner image
+      # churn. Signing disabled; simulator builds don't need it.
+      - name: Build & Analyze (iOS)
+        run: |
+          set -o pipefail
+          xcodebuild build analyze \
+            -project "$PROJECT" \
+            -scheme "$IOS_SCHEME" \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -clonedSourcePackagesDirPath .spm \
+            -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
+            -resultBundlePath "$RUNNER_TEMP/Debug-iOS.xcresult" \
+            ONLY_ACTIVE_ARCH=YES \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcbeautify --renderer github-actions
+
+      - name: Upload xcresult on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-ios-xcresult
+          path: ${{ runner.temp }}/Debug-iOS.xcresult
+          retention-days: 5
+          if-no-files-found: ignore
+
   # Ad-hoc Release compile check (no secrets, not distributable). Catches
   # Release-only breaks before you tag and run Scripts/build-installer.sh.
   # Signing/notarization/DMG/Sparkle stay in the local release flow.
@@ -220,7 +298,7 @@ jobs:
     name: CI Summary
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [lint, actionlint, build-analyze]
+    needs: [lint, actionlint, build-analyze, build-analyze-ios]
     if: always()
     steps:
       - name: Verify required jobs
@@ -228,9 +306,11 @@ jobs:
           echo "lint=${{ needs.lint.result }}"
           echo "actionlint=${{ needs.actionlint.result }}"
           echo "build-analyze=${{ needs.build-analyze.result }}"
+          echo "build-analyze-ios=${{ needs.build-analyze-ios.result }}"
           if [ "${{ needs.lint.result }}" != "success" ] || \
              [ "${{ needs.actionlint.result }}" != "success" ] || \
-             [ "${{ needs.build-analyze.result }}" != "success" ]; then
+             [ "${{ needs.build-analyze.result }}" != "success" ] || \
+             [ "${{ needs.build-analyze-ios.result }}" != "success" ]; then
             echo "::error::One or more required checks failed"
             exit 1
           fi

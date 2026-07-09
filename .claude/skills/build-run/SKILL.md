@@ -1,17 +1,17 @@
 ---
 name: build-run
-description: Build and launch the Petrichor (hiby-fork) macOS app. Use whenever asked to build, compile, run, launch, or open the app, or to verify a change compiles/works in the real app.
+description: Build and launch the Chaparii (hiby-fork) macOS app. Use whenever asked to build, compile, run, launch, or open the macOS app, or to verify a change compiles/works in the real macOS app. For the iPhone/iPad app use the build-run-ios skill instead.
 ---
 
-# Build & run Petrichor (hiby-fork)
+# Build & run Chaparii (macOS)
 
-Personal macOS music player, ad-hoc signed (no Apple developer account). Run all commands from
-the repo root (`~/Projects/petrichor-fork`).
+Personal macOS music player (target `Chaparii-Player`), ad-hoc signed (no Apple developer
+account). Run all commands from the repo root (`~/Projects/petrichor-fork`).
 
 ## Build (Debug)
 
 ```sh
-xcodebuild -project Petrichor.xcodeproj -scheme Petrichor -configuration Debug \
+xcodebuild -project Chaparii-Player.xcodeproj -scheme Chaparii-Player -configuration Debug \
   -derivedDataPath build/DerivedData build \
   CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=YES DEVELOPMENT_TEAM= CODE_SIGN_STYLE=Manual
 ```
@@ -24,7 +24,7 @@ xcodebuild -project Petrichor.xcodeproj -scheme Petrichor -configuration Debug \
 ## Launch
 
 ```sh
-open "build/DerivedData/Build/Products/Debug/Petrichor Dev.app"
+open "build/DerivedData/Build/Products/Debug/Chaparii Dev.app"
 ```
 
 ## Verify a change
@@ -37,6 +37,8 @@ appears). Do not claim a change works from a successful build alone if it has ru
 
 - Do **not** enable the App Sandbox (`ENABLE_APP_SANDBOX = NO` must stay) — it kills the spawned
   `spotdl` binary.
-- Library DB: `~/Library/Application Support/com.atavakoli.petrichor.debug/`.
+- Library DB: `~/Library/Application Support/com.chaparii.player.debug/`.
 - New source files are picked up automatically (filesystem-synchronized groups); no
   `project.pbxproj` edits needed.
+- Both schemes (`Chaparii-Player`, `Chaparii-iOS`) are shared; make sure `-scheme Chaparii-Player`
+  is used for the macOS app.

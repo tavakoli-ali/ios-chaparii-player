@@ -1,5 +1,15 @@
 # Chaparii for iOS / iPad — Plan
 
+## Status (2026-07)
+Phase 0 and the Phase 1 MVP are **shipped and building on both platforms** (CI covers macOS +
+iOS). Done: shared-core refactor, iOS target, File Sharing ingestion (`LibraryManager+iOS.swift`,
+scan triggered at the `RootView` shell level), SFBAudioEngine playback + `AVAudioSession`
+background audio, a 5-tab shell (Library / Browse / Playlists / Search / Now Playing),
+`MiniPlayerBar`, `BrowseView` (Artists/Albums/Genres), search, and duplicate-hiding on iOS
+(`hideDuplicateTracks` default). **Remaining:** iPad `NavigationSplitView` layout; lock-screen /
+Control-Center transport polish; Phase 2 sync (Subsonic/Navidrome — see decision plan). Decision to
+keep the shared-core approach rather than adopt a third-party iOS repo is recorded and stands.
+
 ## Decisions (locked with user)
 - **No spotDL / downloads** on iOS (can't spawn a binary there anyway).
 - **Compromised feature set** for v1: browse library, playlists, now-playing, search, favorites. No tag editing, no online lookup, no downloads.
