@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import GRDB
 
 class Artist: Identifiable, ObservableObject, FetchableRecord, PersistableRecord {

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -399,3 +400,5 @@ extension SidebarListView where Item == LibrarySidebarItem {
         )
     }
 }
+
+#endif

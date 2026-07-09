@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // WindowDelegate class
 //
@@ -32,3 +33,5 @@ class WindowDelegate: NSObject, NSWindowDelegate {
         return true
     }
 }
+
+#endif

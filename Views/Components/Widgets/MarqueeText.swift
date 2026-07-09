@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -286,3 +287,5 @@ private class MarqueeNSView: NSView {
     .padding()
     .background(Color.gray.opacity(0.1))
 }
+
+#endif

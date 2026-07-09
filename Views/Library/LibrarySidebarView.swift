@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct LibrarySidebarView: View {
@@ -331,3 +332,5 @@ struct LibrarySidebarView: View {
     .environmentObject(LibraryManager())
     .frame(width: 250, height: 500)
 }
+
+#endif

@@ -225,7 +225,11 @@ public class PlaybackEngine: NSObject {
         case .sfb:
             return SFBPlaybackBackend()
         case .crescendo:
+            #if os(macOS)
             return CrescendoPlaybackBackend()
+            #else
+            return SFBPlaybackBackend()   // Crescendo is macOS-only
+            #endif
         }
     }
 

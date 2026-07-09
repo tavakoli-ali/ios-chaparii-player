@@ -5,7 +5,11 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#else
 import AppKit
+#endif
 import MediaPlayer
 
 class NowPlayingManager {
@@ -59,7 +63,7 @@ class NowPlayingManager {
         if cachedArtworkURL == track.url, let cached = cachedArtwork {
             return cached
         }
-        guard let image = NSImage(data: artworkData) else {
+        guard let image = PlatformImage(data: artworkData) else {
             cachedArtwork = nil
             cachedArtworkURL = nil
             return nil

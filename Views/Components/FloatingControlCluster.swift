@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // FloatingControlCluster
 //
@@ -56,3 +57,5 @@ extension View {
         }
     }
 }
+
+#endif

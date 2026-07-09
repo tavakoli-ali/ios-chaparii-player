@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct PlaylistDetailView: View {
@@ -532,3 +533,5 @@ struct PlaylistDetailView: View {
         }())
         .frame(height: 600)
 }
+
+#endif

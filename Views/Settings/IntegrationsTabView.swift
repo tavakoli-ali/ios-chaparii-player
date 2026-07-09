@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct IntegrationsTabView: View {
@@ -226,3 +227,5 @@ struct IntegrationsTabView: View {
     IntegrationsTabView()
         .frame(width: 600, height: 400)
 }
+
+#endif

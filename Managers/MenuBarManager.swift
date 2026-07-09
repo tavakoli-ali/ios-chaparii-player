@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // MenuBarManager class
 //
@@ -267,3 +268,5 @@ class MenuBarManager: NSObject {
         NSApp.terminate(nil)
     }
 }
+
+#endif

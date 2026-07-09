@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Conditional Modifier
@@ -134,3 +135,5 @@ struct GradientBackground: View {
         }
     }
 }
+
+#endif

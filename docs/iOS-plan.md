@@ -6,11 +6,14 @@
 - **Library ingestion Phase 1: iTunes File Sharing** — user copies audio (and `.m3u8`) into the app's Documents via Finder/Files; the app indexes it.
 - **Phase 2: server-side sync** — a server holds the master library; iOS uploads/downloads tracks + playlist state.
 
-## Technical findings
-- **SFBAudioEngine** supports iOS (`.iOS(.v15)`) → metadata reading + format support reuse on iOS.
+## Technical findings (updated after code exploration)
+- **Playback is already abstracted.** `PlaybackManager` → `PlaybackEngine` facade → `PlaybackBackend` protocol, with two backends selected by `MediaBackend.current`:
+  - `SFBPlaybackBackend` — imports only AVFoundation/Foundation/**SFBAudioEngine** (which supports `.iOS(.v15)`); **no AppKit → runs on iOS as-is.**
+  - `CrescendoPlaybackBackend` — macOS-only.
+  - **So no AVFoundation rewrite is needed.** iOS just forces `MediaBackend.current = .sfb` (done: `Core/MediaBackend.swift` now returns `.sfb` under `#if os(iOS)`).
 - **GRDB** is cross-platform → the whole DB layer (`Managers/Database/*`, `Models/*`) reuses as-is.
-- **Crescendo** (current playback engine) declares no iOS platform → **iOS playback = AVFoundation** (`AVAudioPlayer`/`AVPlayer`) behind a shared protocol. Verify Crescendo iOS support early; assume AVFoundation.
-- Won't port: menu bar, mini-player `NSWindow`, `NSOpenPanel`, Sparkle, spotDL, `NSWorkspace`/`NSEvent` usage — all `#if os(macOS)`.
+- Metadata reading uses SFBAudioEngine too → reusable on iOS.
+- **The macOS-specific surface to fence/replace** is the app *shell* and desktop features: `PetrichorApp.swift` (`@NSApplicationDelegateAdaptor`, `NSApp`, multiple `WindowGroup`s), menu bar, mini-player `NSWindow`, `NSOpenPanel`, `NSWorkspace`/`NSEvent`, Sparkle, spotDL — all `#if os(macOS)` and given an iOS counterpart (a simple `App`/`WindowGroup` + `AVAudioSession`).
 
 ## Architecture
 Single project (`Chaparii-Player.xcodeproj`) + a new **iOS app target**, sharing a **core**:

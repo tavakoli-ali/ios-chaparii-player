@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct PlaylistsView: View {
@@ -65,3 +66,5 @@ struct PlaylistsView: View {
         .environmentObject(LibraryManager())
         .frame(width: 800, height: 600)
 }
+
+#endif

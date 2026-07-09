@@ -25,6 +25,12 @@ enum MediaBackend {
     /// `true` at app init, so absent an explicit user choice the app runs on
     /// Crescendo; flipping the toggle off selects SFBAudioEngine.
     static var current: MediaBackend {
-        UserDefaults.standard.bool(forKey: userDefaultsKey) ? .crescendo : .sfb
+        #if os(iOS)
+        // The Crescendo backend is macOS-only; iOS always uses SFBAudioEngine
+        // (which supports iOS and has no AppKit dependencies).
+        return .sfb
+        #else
+        return UserDefaults.standard.bool(forKey: userDefaultsKey) ? .crescendo : .sfb
+        #endif
     }
 }

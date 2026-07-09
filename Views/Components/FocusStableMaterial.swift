@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // FocusStableMaterial
 //
@@ -31,3 +32,5 @@ struct FocusStableMaterial: NSViewRepresentable {
         view.state = .active
     }
 }
+
+#endif

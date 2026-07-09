@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct EntityDetailView: View {
@@ -619,3 +620,5 @@ extension EntityDetailView {
     .environmentObject(PlaylistManager())
     .frame(height: 600)
 }
+
+#endif

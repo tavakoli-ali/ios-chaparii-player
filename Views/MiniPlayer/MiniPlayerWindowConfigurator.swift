@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // MiniPlayerWindowConfigurator
 //
@@ -31,3 +32,5 @@ private struct MiniPlayerWindowAccessor: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
+
+#endif

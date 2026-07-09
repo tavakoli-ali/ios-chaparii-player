@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Editable Rule
@@ -461,3 +462,5 @@ private struct SmartRuleRow: View {
         )
     }
 }
+
+#endif

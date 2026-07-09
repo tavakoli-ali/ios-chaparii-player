@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // MiniPlayerWindowManager
 //
@@ -145,3 +146,5 @@ final class MiniPlayerWindow: NSWindow {
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { true }
 }
+
+#endif

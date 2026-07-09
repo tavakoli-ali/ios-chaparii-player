@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Editor Tab
@@ -755,3 +756,5 @@ private struct EditorTrackRow: View {
     .environmentObject(LibraryManager())
     .environmentObject(PlaylistManager())
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -73,3 +74,5 @@ enum NowPlayingArtwork {
         return track.backgroundGradientColors(isDark: isDark)
     }
 }
+
+#endif

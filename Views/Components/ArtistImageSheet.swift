@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct ArtistImageSheet: View {
@@ -253,3 +254,5 @@ struct ArtistImageSheet: View {
         }
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import GRDB
 
 class Album: Identifiable, ObservableObject, FetchableRecord, PersistableRecord {

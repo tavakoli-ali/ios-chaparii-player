@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Split View Configuration
@@ -224,3 +225,5 @@ private struct SplitDivider: View {
             )
     }
 }
+
+#endif

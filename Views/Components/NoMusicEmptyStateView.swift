@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct NoMusicEmptyStateView: View {
@@ -263,3 +264,5 @@ struct NoMusicEmptyStateView: View {
         }())
         .frame(width: 800, height: 600)
 }
+
+#endif

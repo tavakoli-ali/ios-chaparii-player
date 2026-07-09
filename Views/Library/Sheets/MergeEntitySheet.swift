@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Sheet for merging duplicate artists / album artists / composers / albums into a single
@@ -279,3 +280,5 @@ struct MergeEntitySheet: View {
         }
     }
 }
+
+#endif

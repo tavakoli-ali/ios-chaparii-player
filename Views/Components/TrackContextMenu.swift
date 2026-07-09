@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 enum TrackContextMenu {
@@ -449,3 +450,5 @@ struct ContextMenuItemView: View {
         }
     }
 }
+
+#endif

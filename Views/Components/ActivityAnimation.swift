@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Activity Animation Size
@@ -337,3 +338,5 @@ extension NSBezierPath {
     
     return PreviewWrapper()
 }
+
+#endif

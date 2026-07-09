@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // CrescendoMetadataReader
 //
@@ -153,3 +154,5 @@ struct CrescendoMetadataReader: MetadataReader {
         }
     }
 }
+
+#endif

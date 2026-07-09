@@ -1,5 +1,9 @@
 import Foundation
+import CoreGraphics
+import ImageIO
+#if canImport(AppKit)
 import AppKit
+#endif
 import GRDB
 
 enum PlaylistType: String, Codable {

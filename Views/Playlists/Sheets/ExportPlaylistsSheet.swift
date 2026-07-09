@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct ExportPlaylistsSheet: View {
@@ -315,3 +316,5 @@ struct ExportPlaylistsSheet: View {
     return ExportPlaylistsSheet(isPresented: $isPresented)
         .environmentObject(emptyManager)
 }
+
+#endif

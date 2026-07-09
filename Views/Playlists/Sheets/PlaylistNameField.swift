@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Large, borderless playlist-name field shared by the regular and smart playlist editor
@@ -29,3 +30,5 @@ struct PlaylistNameField: View {
     PlaylistNameField(name: .constant("My Playlist"))
         .frame(width: 400)
 }
+
+#endif

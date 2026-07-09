@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CoreTransferable
 import UniformTypeIdentifiers
@@ -45,3 +46,5 @@ final class TrackDragCoordinator {
         return t
     }
 }
+
+#endif

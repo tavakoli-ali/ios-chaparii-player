@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -716,3 +717,5 @@ class WindowManager {
             return coordinator.playlistManager
         }())
 }
+
+#endif

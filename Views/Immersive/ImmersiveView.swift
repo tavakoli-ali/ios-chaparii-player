@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // ImmersiveView
 //
@@ -459,3 +460,5 @@ struct ImmersiveView: View {
         adaptiveText = Self.adaptiveTextColor(for: gradientColors, isDark: colorScheme == .dark)
     }
 }
+
+#endif

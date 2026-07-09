@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 extension LibraryManager {
     func loadMusicLibrary() {
@@ -28,7 +29,7 @@ extension LibraryManager {
                     var isStale = false
                     let resolvedURL = try URL(
                         resolvingBookmarkData: bookmarkData,
-                        options: [.withSecurityScope],
+                        options: .appSecurityScope,
                         relativeTo: nil,
                         bookmarkDataIsStale: &isStale
                     )
@@ -62,7 +63,7 @@ extension LibraryManager {
                     // We have access! Create a new bookmark
                     do {
                         let newBookmarkData = try folder.url.bookmarkData(
-                            options: [.withSecurityScope],
+                            options: .appSecurityScope,
                             includingResourceValuesForKeys: nil,
                             relativeTo: nil
                         )

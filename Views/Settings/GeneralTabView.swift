@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import Sparkle
 
@@ -133,3 +134,5 @@ struct GeneralTabView: View {
         .frame(width: 600, height: 500)
         .environmentObject(LibraryManager())
 }
+
+#endif

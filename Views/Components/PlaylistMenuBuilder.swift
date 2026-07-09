@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Single source of truth for a playlist's options menu (Pin, Edit, Delete), so the Playlist
@@ -34,3 +35,5 @@ enum PlaylistMenuBuilder {
         return items
     }
 }
+
+#endif

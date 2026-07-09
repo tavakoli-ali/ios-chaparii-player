@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 enum AlbumSortOption: String, Codable {
@@ -567,3 +568,5 @@ struct HomeView: View {
         .environmentObject(PlaylistManager())
         .frame(width: 800, height: 600)
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - List Header Style View Modifier
@@ -226,3 +227,5 @@ extension View {
         modifier(HeaderSubtitleStyle())
     }
 }
+
+#endif

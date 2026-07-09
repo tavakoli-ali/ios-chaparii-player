@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Identifiable payload driving `.sheet(item:)` presentation of the online tag
@@ -314,3 +315,5 @@ struct OnlineTagUpdateSheet: View {
         libraryManager.refreshLibrary()
     }
 }
+
+#endif

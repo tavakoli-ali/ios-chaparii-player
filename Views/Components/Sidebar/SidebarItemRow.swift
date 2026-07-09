@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Sidebar Item Row
@@ -186,3 +187,5 @@ struct SidebarItemRow<Item: SidebarItem>: View {
         }
     }
 }
+
+#endif

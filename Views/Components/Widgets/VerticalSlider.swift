@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -127,3 +128,5 @@ extension VerticalSlider {
         }
     }
 }
+
+#endif

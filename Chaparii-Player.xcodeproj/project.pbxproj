@@ -12,10 +12,32 @@
 		5590877F2DE0C078009E7719 /* PetrichorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590877E2DE0C078009E7719 /* PetrichorApp.swift */; };
 		55B0DEC12DE3A58400A41ED9 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 55B0DEC02DE3A58400A41ED9 /* GRDB */; };
 		55D673CF2E42CEA50095A358 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 55D673CE2E42CEA50095A358 /* Sparkle */; };
+		F00DCAFE00000000000000B1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = F00DCAFE00000000000000A1 /* GRDB */; };
+		F00DCAFE00000000000000B2 /* SFBAudioEngine in Frameworks */ = {isa = PBXBuildFile; productRef = F00DCAFE00000000000000A2 /* SFBAudioEngine */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2F9C5F6B2FFF7C8200B3789D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 550F4A062DB45B1A005F794E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F9C5F5D2FFF7C8100B3789D;
+			remoteInfo = "Chaparii-iOS";
+		};
+		2F9C5F752FFF7C8200B3789D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 550F4A062DB45B1A005F794E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F9C5F5D2FFF7C8100B3789D;
+			remoteInfo = "Chaparii-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		550F4A0E2DB45B1A005F794E /* Petrichor Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Petrichor Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F9C5F5E2FFF7C8100B3789D /* Chaparii-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chaparii-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F9C5F6A2FFF7C8200B3789D /* Chaparii-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chaparii-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F9C5F742FFF7C8200B3789D /* Chaparii-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chaparii-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		550F4A0E2DB45B1A005F794E /* Chaparii Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chaparii Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		550F4A3F2DB4786F005F794E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		55593A412DE019E400640247 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		55613A822E04A7230000E217 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -24,23 +46,91 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		55789DCB2F8AACF300FB82A3 /* Exceptions for "Resources" folder in "Petrichor" target */ = {
+		2F9C603B2FFF7CE500B3789D /* Exceptions for "Views" folder in "Chaparii-iOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Folders/FolderSidebarView.swift,
+				Folders/FoldersView.swift,
+				Home/EntityDetailView.swift,
+				Home/HomeSidebarView.swift,
+				Home/HomeView.swift,
+				Immersive/ImmersiveView.swift,
+				Library/LibrarySidebarView.swift,
+				Library/LibraryView.swift,
+				Library/Sheets/MergeEntitySheet.swift,
+				Library/Sheets/OnlineTagUpdateSheet.swift,
+				Library/Sheets/SpotifyDownloadSheet.swift,
+				Library/Sheets/TagEditorSheet.swift,
+				Main/ContentView.swift,
+				Main/PlayerView.swift,
+				Main/PlayQueueView.swift,
+				Main/TrackDetailView.swift,
+				Main/TrackLyricsView.swift,
+				MiniPlayer/MiniPlayerView.swift,
+				MiniPlayer/MiniPlayerWindowButtons.swift,
+				MiniPlayer/MiniPlayerWindowConfigurator.swift,
+				MiniPlayer/MiniPlayerWindowManager.swift,
+				Playlists/PlaylistDetailView.swift,
+				Playlists/PlaylistSidebarView.swift,
+				Playlists/PlaylistsView.swift,
+				Playlists/Sheets/ExportPlaylistsSheet.swift,
+				Playlists/Sheets/PlaylistEditorChrome.swift,
+				Playlists/Sheets/PlaylistNameField.swift,
+				Playlists/Sheets/RegularPlaylistEditorSheet.swift,
+				Playlists/Sheets/SmartPlaylistEditorSheet.swift,
+				Settings/AboutTabView.swift,
+				Settings/AppearanceTabView.swift,
+				Settings/EqualizerView.swift,
+				Settings/GeneralTabView.swift,
+				Settings/IntegrationsTabView.swift,
+				Settings/LibraryTabView.swift,
+				Settings/SettingsView.swift,
+				Support/ReportProblemView.swift,
+			);
+			target = 2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */;
+		};
+		2F9C603F2FFF7D1300B3789D /* Exceptions for "Chaparii-iOS" folder in "Chaparii-iOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */;
+		};
+		55789DCB2F8AACF300FB82A3 /* Exceptions for "Resources" folder in "Chaparii-Player" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				known_artists_YYYYMMDD.txt,
 			);
-			target = 550F4A0D2DB45B1A005F794E /* Petrichor */;
+			target = 550F4A0D2DB45B1A005F794E /* Chaparii-Player */;
 		};
-		55B57E812E19E5E200E57EC3 /* Exceptions for "Scripts" folder in "Petrichor" target */ = {
+		55B57E812E19E5E200E57EC3 /* Exceptions for "Scripts" folder in "Chaparii-Player" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"build-installer.sh",
 			);
-			target = 550F4A0D2DB45B1A005F794E /* Petrichor */;
+			target = 550F4A0D2DB45B1A005F794E /* Chaparii-Player */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2F9C5F5F2FFF7C8100B3789D /* Chaparii-iOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2F9C603F2FFF7D1300B3789D /* Exceptions for "Chaparii-iOS" folder in "Chaparii-iOS" target */,
+			);
+			path = "Chaparii-iOS";
+			sourceTree = "<group>";
+		};
+		2F9C5F6D2FFF7C8200B3789D /* Chaparii-iOSTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Chaparii-iOSTests";
+			sourceTree = "<group>";
+		};
+		2F9C5F772FFF7C8200B3789D /* Chaparii-iOSUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Chaparii-iOSUITests";
+			sourceTree = "<group>";
+		};
 		555A7BBD2E65FF88009F4922 /* Core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Core;
@@ -63,13 +153,16 @@
 		};
 		559087D82DE0C0A6009E7719 /* Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2F9C603B2FFF7CE500B3789D /* Exceptions for "Views" folder in "Chaparii-iOS" target */,
+			);
 			path = Views;
 			sourceTree = "<group>";
 		};
 		55B57E742E19D73900E57EC3 /* Scripts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				55B57E812E19E5E200E57EC3 /* Exceptions for "Scripts" folder in "Petrichor" target */,
+				55B57E812E19E5E200E57EC3 /* Exceptions for "Scripts" folder in "Chaparii-Player" target */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -87,7 +180,7 @@
 		55F38A842DF8F2FE0028843B /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				55789DCB2F8AACF300FB82A3 /* Exceptions for "Resources" folder in "Petrichor" target */,
+				55789DCB2F8AACF300FB82A3 /* Exceptions for "Resources" folder in "Chaparii-Player" target */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -95,6 +188,29 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2F9C5F5B2FFF7C8100B3789D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F00DCAFE00000000000000B1 /* GRDB in Frameworks */,
+				F00DCAFE00000000000000B2 /* SFBAudioEngine in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F672FFF7C8200B3789D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F712FFF7C8200B3789D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		550F4A0B2DB45B1A005F794E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,16 +242,97 @@
 				55593A412DE019E400640247 /* README.md */,
 				55FB816B2EC22E6E008321CA /* ACKNOWLEDGEMENTS.md */,
 				5590877E2DE0C078009E7719 /* PetrichorApp.swift */,
-				550F4A0E2DB45B1A005F794E /* Petrichor Dev.app */,
+				550F4A0E2DB45B1A005F794E /* Chaparii Dev.app */,
+				2F9C5F5E2FFF7C8100B3789D /* Chaparii-iOS.app */,
+				2F9C5F5F2FFF7C8100B3789D /* Chaparii-iOS */,
+				2F9C5F6A2FFF7C8200B3789D /* Chaparii-iOSTests.xctest */,
+				2F9C5F6D2FFF7C8200B3789D /* Chaparii-iOSTests */,
+				2F9C5F742FFF7C8200B3789D /* Chaparii-iOSUITests.xctest */,
+				2F9C5F772FFF7C8200B3789D /* Chaparii-iOSUITests */,
 			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		550F4A0D2DB45B1A005F794E /* Petrichor */ = {
+		2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 550F4A1A2DB45B1B005F794E /* Build configuration list for PBXNativeTarget "Petrichor" */;
+			buildConfigurationList = 2F9C5F822FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOS" */;
+			buildPhases = (
+				2F9C5F5A2FFF7C8100B3789D /* Sources */,
+				2F9C5F5B2FFF7C8100B3789D /* Frameworks */,
+				2F9C5F5C2FFF7C8100B3789D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2F9C5F5F2FFF7C8100B3789D /* Chaparii-iOS */,
+				555A7BBD2E65FF88009F4922 /* Core */,
+				559087A32DE0C09C009E7719 /* Application */,
+				559087AA2DE0C0A2009E7719 /* Managers */,
+				559087B72DE0C0A5009E7719 /* Models */,
+				55F38A7E2DF8F2F30028843B /* Utilities */,
+			);
+			name = "Chaparii-iOS";
+			packageProductDependencies = (
+				F00DCAFE00000000000000A1 /* GRDB */,
+				F00DCAFE00000000000000A2 /* SFBAudioEngine */,
+			);
+			productName = "Chaparii-iOS";
+			productReference = 2F9C5F5E2FFF7C8100B3789D /* Chaparii-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2F9C5F692FFF7C8200B3789D /* Chaparii-iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F9C5F832FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOSTests" */;
+			buildPhases = (
+				2F9C5F662FFF7C8200B3789D /* Sources */,
+				2F9C5F672FFF7C8200B3789D /* Frameworks */,
+				2F9C5F682FFF7C8200B3789D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2F9C5F6C2FFF7C8200B3789D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2F9C5F6D2FFF7C8200B3789D /* Chaparii-iOSTests */,
+			);
+			name = "Chaparii-iOSTests";
+			packageProductDependencies = (
+			);
+			productName = "Chaparii-iOSTests";
+			productReference = 2F9C5F6A2FFF7C8200B3789D /* Chaparii-iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2F9C5F732FFF7C8200B3789D /* Chaparii-iOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F9C5F842FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOSUITests" */;
+			buildPhases = (
+				2F9C5F702FFF7C8200B3789D /* Sources */,
+				2F9C5F712FFF7C8200B3789D /* Frameworks */,
+				2F9C5F722FFF7C8200B3789D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2F9C5F762FFF7C8200B3789D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2F9C5F772FFF7C8200B3789D /* Chaparii-iOSUITests */,
+			);
+			name = "Chaparii-iOSUITests";
+			packageProductDependencies = (
+			);
+			productName = "Chaparii-iOSUITests";
+			productReference = 2F9C5F742FFF7C8200B3789D /* Chaparii-iOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		550F4A0D2DB45B1A005F794E /* Chaparii-Player */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 550F4A1A2DB45B1B005F794E /* Build configuration list for PBXNativeTarget "Chaparii-Player" */;
 			buildPhases = (
 				550F4A0A2DB45B1A005F794E /* Sources */,
 				550F4A0B2DB45B1A005F794E /* Frameworks */,
@@ -163,7 +360,7 @@
 				552CE3E42FE3263900A5C93D /* Crescendo */,
 			);
 			productName = "Chaparii-Player";
-			productReference = 550F4A0E2DB45B1A005F794E /* Petrichor Dev.app */;
+			productReference = 550F4A0E2DB45B1A005F794E /* Chaparii Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -173,15 +370,26 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
+					2F9C5F5D2FFF7C8100B3789D = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					2F9C5F692FFF7C8200B3789D = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 2F9C5F5D2FFF7C8100B3789D;
+					};
+					2F9C5F732FFF7C8200B3789D = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 2F9C5F5D2FFF7C8100B3789D;
+					};
 					550F4A0D2DB45B1A005F794E = {
 						CreatedOnToolsVersion = 16.3;
 					};
 				};
 			};
-			buildConfigurationList = 550F4A092DB45B1A005F794E /* Build configuration list for PBXProject "Petrichor" */;
+			buildConfigurationList = 550F4A092DB45B1A005F794E /* Build configuration list for PBXProject "Chaparii-Player" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -201,12 +409,36 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				550F4A0D2DB45B1A005F794E /* Petrichor */,
+				550F4A0D2DB45B1A005F794E /* Chaparii-Player */,
+				2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */,
+				2F9C5F692FFF7C8200B3789D /* Chaparii-iOSTests */,
+				2F9C5F732FFF7C8200B3789D /* Chaparii-iOSUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2F9C5F5C2FFF7C8100B3789D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F682FFF7C8200B3789D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F722FFF7C8200B3789D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		550F4A0C2DB45B1A005F794E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,6 +449,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2F9C5F5A2FFF7C8100B3789D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F662FFF7C8200B3789D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F9C5F702FFF7C8200B3789D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		550F4A0A2DB45B1A005F794E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -227,7 +480,187 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2F9C5F6C2FFF7C8200B3789D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */;
+			targetProxy = 2F9C5F6B2FFF7C8200B3789D /* PBXContainerItemProxy */;
+		};
+		2F9C5F762FFF7C8200B3789D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F9C5F5D2FFF7C8100B3789D /* Chaparii-iOS */;
+			targetProxy = 2F9C5F752FFF7C8200B3789D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		2F9C5F7C2FFF7C8200B3789D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chaparii-iOS/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2F9C5F7D2FFF7C8200B3789D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chaparii-iOS/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2F9C5F7E2FFF7C8200B3789D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P56TNDWVX7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chaparii-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chaparii-iOS";
+			};
+			name = Debug;
+		};
+		2F9C5F7F2FFF7C8200B3789D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P56TNDWVX7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chaparii-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chaparii-iOS";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2F9C5F802FFF7C8200B3789D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P56TNDWVX7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Chaparii-iOS";
+			};
+			name = Debug;
+		};
+		2F9C5F812FFF7C8200B3789D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P56TNDWVX7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chaparii.player.ios.Chaparii-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Chaparii-iOS";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		550F4A182DB45B1B005F794E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -436,7 +869,7 @@
 				MARKETING_VERSION = "Development Build";
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chaparii.player;
-				PRODUCT_NAME = "Chaparii";
+				PRODUCT_NAME = Chaparii;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -449,7 +882,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		550F4A092DB45B1A005F794E /* Build configuration list for PBXProject "Petrichor" */ = {
+		2F9C5F822FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F9C5F7C2FFF7C8200B3789D /* Debug */,
+				2F9C5F7D2FFF7C8200B3789D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F9C5F832FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F9C5F7E2FFF7C8200B3789D /* Debug */,
+				2F9C5F7F2FFF7C8200B3789D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F9C5F842FFF7C8200B3789D /* Build configuration list for PBXNativeTarget "Chaparii-iOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F9C5F802FFF7C8200B3789D /* Debug */,
+				2F9C5F812FFF7C8200B3789D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		550F4A092DB45B1A005F794E /* Build configuration list for PBXProject "Chaparii-Player" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				550F4A182DB45B1B005F794E /* Debug */,
@@ -458,7 +918,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		550F4A1A2DB45B1B005F794E /* Build configuration list for PBXNativeTarget "Petrichor" */ = {
+		550F4A1A2DB45B1B005F794E /* Build configuration list for PBXNativeTarget "Chaparii-Player" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				550F4A1B2DB45B1B005F794E /* Debug */,
@@ -524,6 +984,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 55D673CD2E42CEA50095A358 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		F00DCAFE00000000000000A1 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 55B0DEBF2DE3A58400A41ED9 /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+		F00DCAFE00000000000000A2 /* SFBAudioEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 552A583E2EC0629A00F6D8C0 /* XCRemoteSwiftPackageReference "SFBAudioEngine" */;
+			productName = SFBAudioEngine;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

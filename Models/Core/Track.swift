@@ -1,6 +1,10 @@
 import Foundation
 import GRDB
+#if canImport(UIKit)
+import UIKit
+#else
 import AppKit
+#endif
 import SwiftUI
 
 struct Track: Identifiable, Equatable, Hashable, FetchableRecord, PersistableRecord {
@@ -64,7 +68,7 @@ struct Track: Identifiable, Equatable, Hashable, FetchableRecord, PersistableRec
     var displayComposer: String { LibraryFilterType.composers.localizedDisplay(composer) }
     var displayYear: String { LibraryFilterType.years.localizedDisplay(year) }
 
-    var dominantColors: [NSColor] {
+    var dominantColors: [PlatformColor] {
         guard let original = albumArtworkData else { return [] }
         return ImageUtils.cachedDominantColors(id: id, imageData: original)
     }

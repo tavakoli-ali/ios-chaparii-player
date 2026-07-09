@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct AboutTabView: View {
@@ -275,3 +276,5 @@ struct AboutTabView: View {
         .environmentObject(LibraryManager())
         .frame(width: 600, height: 500)
 }
+
+#endif

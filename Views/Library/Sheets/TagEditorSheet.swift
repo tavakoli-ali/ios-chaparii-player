@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Identifiable payload driving `.sheet(item:)` presentation of the tag editor.
@@ -401,3 +402,5 @@ struct TagEditorSheet: View {
         dismiss()
     }
 }
+
+#endif

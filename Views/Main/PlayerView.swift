@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import Foundation
 
@@ -897,3 +898,5 @@ struct ControlButtonStyle: ButtonStyle {
 
     return PreviewWrapper()
 }
+
+#endif

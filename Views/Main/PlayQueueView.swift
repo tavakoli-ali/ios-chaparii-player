@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -376,3 +377,5 @@ struct QueueDropDelegate: DropDelegate {
         .environmentObject(PlaylistManager())
         .frame(width: 350, height: 600)
 }
+
+#endif

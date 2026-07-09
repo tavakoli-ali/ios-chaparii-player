@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // CrescendoPlaybackBackend
 //
@@ -353,3 +354,5 @@ private func onMainStatic<T>(_ body: @MainActor () -> T) -> T {
     }
     return DispatchQueue.main.sync { MainActor.assumeIsolated(body) }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Hover Effect Modifier
@@ -80,3 +81,5 @@ extension View {
         ))
     }
 }
+
+#endif

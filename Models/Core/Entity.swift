@@ -1,5 +1,9 @@
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#else
 import AppKit
+#endif
 import SwiftUI
 import CryptoKit
 
@@ -51,7 +55,7 @@ extension Entity {
 // MARK: - Shared Color Defaults
 
 extension Entity {
-    var dominantColors: [NSColor] {
+    var dominantColors: [PlatformColor] {
         guard let original = artworkData else { return [] }
         return ImageUtils.cachedDominantColors(id: id, imageData: original)
     }

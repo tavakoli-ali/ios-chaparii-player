@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct FoldersSidebarView: View {
@@ -273,3 +274,5 @@ private struct FolderNodeRow: View {
         .environmentObject(LibraryManager())
         .frame(width: 250, height: 500)
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // NowPlayingProgressBar
 //
@@ -127,3 +128,5 @@ struct NowPlayingProgressBar: View {
         playbackManager.seekTo(time: newTime)
     }
 }
+
+#endif

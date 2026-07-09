@@ -1,4 +1,8 @@
+#if canImport(UIKit)
+import UIKit
+#else
 import AppKit
+#endif
 import CoreImage
 import SwiftUI
 import UniformTypeIdentifiers
@@ -52,7 +56,7 @@ enum ImageUtils {
             destHeight = (srcHeight * scale).rounded(.down)
         }
 
-        let targetSize = NSSize(width: destWidth, height: destHeight)
+        let targetSize = CGSize(width: destWidth, height: destHeight)
 
         guard let context = CGContext(
             data: nil,
@@ -126,7 +130,7 @@ enum ImageUtils {
     ///   - size: Target size (will be used for both width and height)
     ///   - compressionFactor: JPEG compression quality (0.0 to 1.0)
     /// - Returns: Resized JPEG data, or nil if resizing fails
-    static func resizeImage(from imageData: Data, to size: NSSize, compressionFactor: Float = 0.8) -> Data? {
+    static func resizeImage(from imageData: Data, to size: CGSize, compressionFactor: Float = 0.8) -> Data? {
         guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),
               let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, [
                 kCGImageSourceShouldCacheImmediately: true
@@ -160,11 +164,11 @@ enum ImageUtils {
     /// - Parameters:
     ///   - imageData: Image data in any supported format
     ///   - colorCount: Number of dominant colors to return (default: 6)
-    /// - Returns: Array of NSColor with maximum color diversity, or empty array if extraction fails
+    /// - Returns: Array of PlatformColor with maximum color diversity, or empty array if extraction fails
     static func extractDominantColors(
         from imageData: Data,
         colorCount: Int = 6
-    ) -> [NSColor] {
+    ) -> [PlatformColor] {
         guard let ciImage = CIImage(data: imageData) else { return [] }
 
         let extent = ciImage.extent
@@ -212,8 +216,8 @@ enum ImageUtils {
                 let cG = min(max(g, 0.05), 0.9)
                 let cB = min(max(b, 0.05), 0.9)
 
-                var h: CGFloat = 0, s: CGFloat = 0, br: CGFloat = 0
-                NSColor(red: cR, green: cG, blue: cB, alpha: 1).getHue(&h, saturation: &s, brightness: &br, alpha: nil)
+                var h: CGFloat = 0, s: CGFloat = 0, br: CGFloat = 0, ha: CGFloat = 0
+                PlatformColor(red: cR, green: cG, blue: cB, alpha: 1).getHue(&h, saturation: &s, brightness: &br, alpha: &ha)
                 candidates.append((h, s, br))
             }
         }
@@ -245,7 +249,7 @@ enum ImageUtils {
             selected.append(candidates[bestIdx])
         }
 
-        return selected.map { NSColor(hue: $0.h, saturation: $0.s, brightness: $0.b, alpha: 1) }
+        return selected.map { PlatformColor(hue: $0.h, saturation: $0.s, brightness: $0.b, alpha: 1) }
     }
 
     /// Adjust dominant colors for use as background gradients based on color scheme.
@@ -254,11 +258,11 @@ enum ImageUtils {
     ///   - isDark: Whether the current color scheme is dark mode
     /// - Returns: Array of SwiftUI Colors adjusted for background use
     static func backgroundGradientColors(
-        from colors: [NSColor],
+        from colors: [PlatformColor],
         isDark: Bool
     ) -> [Color] {
         colors.map { color -> Color in
-            guard let rgb = color.usingColorSpace(.deviceRGB) else { return Color(nsColor: color) }
+            let rgb = color
 
             var hue: CGFloat = 0
             var saturation: CGFloat = 0
@@ -274,7 +278,7 @@ enum ImageUtils {
                 saturation = min(saturation, 0.7)
             }
 
-            return Color(nsColor: NSColor(
+            return Color(platform: PlatformColor(
                 hue: hue,
                 saturation: saturation,
                 brightness: brightness,
@@ -285,20 +289,20 @@ enum ImageUtils {
 
     // MARK: - Cached Color Lookups
 
-    private static var colorCache = NSCache<NSString, CachedNSColors>()
+    private static var colorCache = NSCache<NSString, CachedPlatformColors>()
 
     /// Returns cached dominant colors for the given ID, extracting from imageData on cache miss.
     static func cachedDominantColors(
         id: UUID,
         imageData: Data
-    ) -> [NSColor] {
+    ) -> [PlatformColor] {
         let cacheKey = "\(id.uuidString)-dominantColors" as NSString
         if let cached = colorCache.object(forKey: cacheKey) {
             return cached.colors
         }
 
         let colors = extractDominantColors(from: imageData)
-        colorCache.setObject(CachedNSColors(colors: colors), forKey: cacheKey)
+        colorCache.setObject(CachedPlatformColors(colors: colors), forKey: cacheKey)
         return colors
     }
 
@@ -311,13 +315,13 @@ enum ImageUtils {
         let suffix = isDark ? "dark" : "light"
         let cacheKey = "\(id.uuidString)-gradient-\(suffix)" as NSString
         if let cached = colorCache.object(forKey: cacheKey) {
-            return cached.colors.map { Color(nsColor: $0) }
+            return cached.colors.map { Color(platform: $0) }
         }
 
         let dominant = cachedDominantColors(id: id, imageData: imageData)
         let adjusted = backgroundGradientColors(from: dominant, isDark: isDark)
-        let nsColors = adjusted.map { NSColor($0) }
-        colorCache.setObject(CachedNSColors(colors: nsColors), forKey: cacheKey)
+        let nsColors = adjusted.map { PlatformColor($0) }
+        colorCache.setObject(CachedPlatformColors(colors: nsColors), forKey: cacheKey)
         return adjusted
     }
 
@@ -380,9 +384,9 @@ enum ImageUtils {
         let hue2 = (hue1 + goldenRatio).truncatingRemainder(dividingBy: 1.0)
         let hue3 = (hue1 + goldenRatio * 2).truncatingRemainder(dividingBy: 1.0)
 
-        let c1 = NSColor(hue: hue1, saturation: 0.55, brightness: 0.85, alpha: 1)
-        let c2 = NSColor(hue: hue2, saturation: 0.5, brightness: 0.8, alpha: 1)
-        let c3 = NSColor(hue: hue3, saturation: 0.5, brightness: 0.9, alpha: 1)
+        let c1 = PlatformColor(hue: hue1, saturation: 0.55, brightness: 0.85, alpha: 1)
+        let c2 = PlatformColor(hue: hue2, saturation: 0.5, brightness: 0.8, alpha: 1)
+        let c3 = PlatformColor(hue: hue3, saturation: 0.5, brightness: 0.9, alpha: 1)
 
         // Gradient angle varies per seed
         let angle = CGFloat(hAngle % 628) / 100.0  // 0 to ~2π
@@ -448,14 +452,15 @@ enum ImageUtils {
         style.alignment = .center
         style.lineBreakMode = .byTruncatingTail
         let attrs: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: fontSize, weight: .bold),
-            .foregroundColor: NSColor.white.withAlphaComponent(0.9),
+            .font: PlatformFont.systemFont(ofSize: fontSize, weight: .bold),
+            .foregroundColor: PlatformColor.white.withAlphaComponent(0.9),
             .paragraphStyle: style
         ]
         let bound = (text as NSString).boundingRect(
             with: CGSize(width: CGFloat(size - 32), height: CGFloat(size)),
             options: .usesLineFragmentOrigin,
-            attributes: attrs
+            attributes: attrs,
+            context: nil
         )
         (text as NSString).draw(
             in: CGRect(x: 16, y: (CGFloat(size) - bound.height) / 2, width: CGFloat(size - 32), height: bound.height + 4),
@@ -464,7 +469,7 @@ enum ImageUtils {
         ctx.restoreGState()
 
         guard let cgImage = ctx.makeImage() else { return nil }
-        return NSBitmapImageRep(cgImage: cgImage).representation(using: .jpeg, properties: [.compressionFactor: 0.85])
+        return encodeJPEG(cgImage, quality: 0.85)
     }
 
     // MARK: - Intel x86_64 fallback
@@ -504,7 +509,7 @@ enum ImageUtils {
 
         return resizeImage(
             from: imageData,
-            to: NSSize(width: destWidth, height: destHeight),
+            to: CGSize(width: destWidth, height: destHeight),
             compressionFactor: Float(quality)
         )
     }
@@ -513,9 +518,9 @@ enum ImageUtils {
 
 // MARK: - Color Cache Object
 
-private class CachedNSColors: NSObject {
-    let colors: [NSColor]
-    init(colors: [NSColor]) { self.colors = colors }
+private class CachedPlatformColors: NSObject {
+    let colors: [PlatformColor]
+    init(colors: [PlatformColor]) { self.colors = colors }
 }
 
 // MARK: - Deterministic Hash

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Animation Type
@@ -422,3 +423,5 @@ struct WindowDragPreventer: NSViewRepresentable {
         }
     }
 }
+
+#endif

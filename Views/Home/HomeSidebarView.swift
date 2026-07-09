@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct HomeSidebarView: View {
@@ -287,3 +288,5 @@ struct HomeSidebarView: View {
         .environmentObject(PlaylistManager())
         .frame(width: 250, height: 500)
 }
+
+#endif

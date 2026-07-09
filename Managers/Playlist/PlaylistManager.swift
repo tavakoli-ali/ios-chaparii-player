@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class PlaylistManager: ObservableObject {
     @Published var playlists: [Playlist] = []

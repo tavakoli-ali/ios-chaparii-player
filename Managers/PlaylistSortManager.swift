@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import Combine
 
 /// Manages playlist-specific sorting preferences
 class PlaylistSortManager: ObservableObject {

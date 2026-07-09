@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Shared header and footer for the regular and smart playlist editor sheets, so their
@@ -63,3 +64,5 @@ struct PlaylistEditorFooter: View {
         .padding()
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // NowPlayingControlsView
 //
@@ -140,3 +141,5 @@ struct NowPlayingControlsView: View {
         .help(playlistManager.repeatMode.tooltip)
     }
 }
+
+#endif

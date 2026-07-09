@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct LibraryTabView: View {
@@ -606,3 +607,5 @@ private struct CompactFolderRowView: View {
         .environmentObject(LibraryManager())
         .frame(width: 600, height: 500)
 }
+
+#endif

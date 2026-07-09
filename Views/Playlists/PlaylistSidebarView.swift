@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -332,3 +333,5 @@ struct PlaylistSidebarView: View {
         .environmentObject(emptyManager)
         .frame(width: 250, height: 500)
 }
+
+#endif

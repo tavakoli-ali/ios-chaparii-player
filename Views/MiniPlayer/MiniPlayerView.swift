@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // MiniPlayerView
 //
@@ -539,3 +540,5 @@ struct MiniPlayerView: View {
         return duration
     }
 }
+
+#endif

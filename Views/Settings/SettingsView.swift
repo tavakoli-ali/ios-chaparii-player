@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct SettingsView: View {
@@ -103,3 +104,5 @@ struct SettingsView: View {
             return manager
         }())
 }
+
+#endif

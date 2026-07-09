@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct EqualizerView: View {
@@ -231,3 +232,5 @@ private struct EqualizerWindowConfigurator: NSViewRepresentable {
         }())
         .frame(width: 500, height: 300)
 }
+
+#endif

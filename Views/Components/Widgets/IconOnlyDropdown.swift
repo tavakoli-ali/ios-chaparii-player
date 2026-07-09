@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -124,3 +125,5 @@ struct IconOnlyDropdownRepresentable<Item: Hashable>: NSViewRepresentable {
         }
     }
 }
+
+#endif

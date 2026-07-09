@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Renders an SF Symbol by name, transparently handling both system symbols and custom
@@ -19,3 +20,5 @@ struct SymbolImage: View {
         }
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import Foundation
 
@@ -172,3 +173,5 @@ struct FoldersView: View {
         }())
         .frame(width: 800, height: 600)
 }
+
+#endif

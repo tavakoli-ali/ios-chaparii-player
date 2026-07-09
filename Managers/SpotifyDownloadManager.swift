@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // SpotifyDownloadManager
 //
@@ -10,6 +11,7 @@
 //
 
 import Foundation
+import Combine
 
 @MainActor
 final class SpotifyDownloadManager: ObservableObject {
@@ -475,3 +477,5 @@ enum SpotifyAPI {
         return try decoder.decode(T.self, from: data)
     }
 }
+
+#endif

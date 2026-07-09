@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct TrackTableView: View {
@@ -737,20 +738,5 @@ private struct FavoriteButtonCell: View {
 
 // MARK: - Track Extension for Sorting
 
-extension Track {
-    var sortableTrackNumber: Int {
-        trackNumber ?? Int.max
-    }
-    
-    var sortableDiscNumber: Int {
-        discNumber ?? Int.max
-    }
-    
-    var sortableDateAdded: Date {
-        dateAdded ?? Date.distantPast
-    }
-    
-    var sortableIsFavorite: Int {
-        isFavorite ? 0 : 1
-    }
-}
+
+#endif

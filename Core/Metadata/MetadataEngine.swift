@@ -100,7 +100,11 @@ enum MetadataEngine {
         case .sfb:
             return SFBMetadataReader()
         case .crescendo:
+            #if os(macOS)
             return CrescendoMetadataReader()
+            #else
+            return SFBMetadataReader()   // Crescendo is macOS-only
+            #endif
         }
     }
 }

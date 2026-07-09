@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Track View
@@ -93,3 +94,5 @@ struct TrackContextMenuContent: View {
     .frame(height: 600)
     .environmentObject(PlaybackManager(libraryManager: LibraryManager(), playlistManager: PlaylistManager()))
 }
+
+#endif

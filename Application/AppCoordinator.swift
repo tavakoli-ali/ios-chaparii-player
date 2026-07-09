@@ -4,6 +4,7 @@
 // This class handles playback initialization & state saving and restoration based on library updates.
 //
 
+import Combine
 import SwiftUI
 
 class AppCoordinator: ObservableObject {
@@ -12,7 +13,9 @@ class AppCoordinator: ObservableObject {
     let libraryManager: LibraryManager
     let playlistManager: PlaylistManager
     let playbackManager: PlaybackManager
+    #if os(macOS)
     let menuBarManager: MenuBarManager
+    #endif
     let scrobbleManager: ScrobbleManager
     
     private var hadFoldersAtStartup: Bool = false
@@ -40,8 +43,10 @@ class AppCoordinator: ObservableObject {
         // Setup now playing - PlaybackManager owns the single Now Playing path
         playbackManager.connectRemoteCommandCenter()
         
-        // Setup menubar
+        // Setup menubar (macOS only)
+        #if os(macOS)
         menuBarManager = MenuBarManager(playbackManager: playbackManager, playlistManager: playlistManager)
+        #endif
         
         // Setup Scrobbling
         scrobbleManager = ScrobbleManager()

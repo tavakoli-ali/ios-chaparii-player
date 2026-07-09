@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct TrackDetailView: View {
@@ -543,3 +544,5 @@ private struct FileDetailsSection: View {
         .frame(width: 350, height: 700)
         .environmentObject(LibraryManager())
 }
+
+#endif

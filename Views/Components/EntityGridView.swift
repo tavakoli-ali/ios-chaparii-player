@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct EntityGridView<T: Entity>: View {
@@ -258,3 +259,5 @@ private struct EntityGridItem<T: Entity>: View {
         renderedImage = image
     }
 }
+
+#endif

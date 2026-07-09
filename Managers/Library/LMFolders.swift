@@ -6,9 +6,12 @@
 //
 
 import Foundation
+#if canImport(AppKit)
 import AppKit
+#endif
 
 extension LibraryManager {
+    #if os(macOS)
     func addFolder() {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
@@ -32,7 +35,7 @@ extension LibraryManager {
                 // Create security bookmark
                 do {
                     let bookmarkData = try url.bookmarkData(
-                        options: [.withSecurityScope],
+                        options: .appSecurityScope,
                         includingResourceValuesForKeys: nil,
                         relativeTo: nil
                     )
@@ -58,6 +61,7 @@ extension LibraryManager {
             }
         }
     }
+    #endif
 
     func removeFolder(_ folder: Folder) {
         Logger.info("Removing folder: \(folder.name)")
@@ -219,7 +223,7 @@ extension LibraryManager {
         do {
             // Create a fresh bookmark
             let newBookmarkData = try folder.url.bookmarkData(
-                options: [.withSecurityScope],
+                options: .appSecurityScope,
                 includingResourceValuesForKeys: nil,
                 relativeTo: nil
             )

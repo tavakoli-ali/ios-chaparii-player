@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // MiniPlayerWindowButtons
 //
@@ -55,3 +56,5 @@ struct MiniPlayerWindowButtons: View {
         .help(help)
     }
 }
+
+#endif

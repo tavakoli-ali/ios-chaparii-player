@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import AppKit
 
@@ -101,3 +102,5 @@ struct SearchInputField: NSViewRepresentable {
     .padding()
     .frame(width: 400, height: 200)
 }
+
+#endif

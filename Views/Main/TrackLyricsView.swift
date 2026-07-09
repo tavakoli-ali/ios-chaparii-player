@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 struct TrackLyricsView: View {
@@ -241,3 +242,5 @@ struct TrackLyricsContent: View {
         }
     }
 }
+
+#endif

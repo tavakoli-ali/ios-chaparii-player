@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Entity View
@@ -34,3 +35,5 @@ struct EntityView<T: Entity>: View {
     )
     .frame(height: 600)
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // PlayPauseIcon
 //
@@ -30,3 +31,5 @@ struct PlayPauseIcon: View {
         .animation(.easeInOut(duration: 0.2), value: isPlaying)
     }
 }
+
+#endif

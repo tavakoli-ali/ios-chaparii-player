@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - SidebarView Wrapper
@@ -122,3 +123,5 @@ extension SidebarView where Item == LibrarySidebarItem {
         )
     }
 }
+
+#endif

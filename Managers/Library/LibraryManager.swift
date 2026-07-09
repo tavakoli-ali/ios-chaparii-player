@@ -7,7 +7,10 @@
 //
 
 import Foundation
+import Combine
+#if canImport(AppKit)
 import AppKit
+#endif
 
 class LibraryManager: ObservableObject {
     @Published var tracks: [Track] = []

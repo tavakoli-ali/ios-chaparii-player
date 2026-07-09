@@ -25,14 +25,20 @@ final class SFBPlaybackBackend: NSObject, PlaybackBackend {
 
     var volume: Float {
         get {
+            #if os(macOS)
             sfbPlayer.volume
+            #else
+            1.0   // iOS: output level is system-controlled
+            #endif
         }
         set {
+            #if os(macOS)
             do {
                 try sfbPlayer.setVolume(newValue)
             } catch {
                 Logger.error("Failed to set volume: \(error)")
             }
+            #endif
         }
     }
 

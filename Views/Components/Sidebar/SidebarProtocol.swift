@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 // MARK: - Sidebar Item Protocol
@@ -240,3 +241,5 @@ struct FolderNodeSidebarItem: SidebarItem {
         self.count = nil
     }
 }
+
+#endif

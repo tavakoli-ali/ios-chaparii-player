@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Identifiable payload driving `.sheet(item:)` presentation of the Spotify
@@ -317,3 +318,5 @@ private struct RadioButtonToggleStyle: ToggleStyle {
         .buttonStyle(.plain)
     }
 }
+
+#endif

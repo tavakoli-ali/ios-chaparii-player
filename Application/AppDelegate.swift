@@ -1,3 +1,4 @@
+#if os(macOS)
 //
 // AppDelegate class
 //
@@ -412,3 +413,5 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         UserDefaults.standard.register(defaults: defaults)
     }
 }
+
+#endif
