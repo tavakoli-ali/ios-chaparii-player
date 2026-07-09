@@ -7,6 +7,7 @@ struct NowPlayingView: View {
 
     @State private var isScrubbing = false
     @State private var scrubValue: Double = 0
+    @State private var isFavorite = false
 
     var body: some View {
         NavigationStack {
@@ -18,10 +19,13 @@ struct NowPlayingView: View {
                             Text(track.title).font(.title3).bold().multilineTextAlignment(.center)
                             Text(track.artist).foregroundStyle(.secondary)
                         }
+                        favoriteButton(for: track)
                         seekBar(for: track)
                         transport
                     }
                     .padding()
+                    .onAppear { isFavorite = track.isFavorite }
+                    .onChange(of: track.trackId) { _, _ in isFavorite = track.isFavorite }
                 } else {
                     ContentUnavailableView("Nothing Playing", systemImage: "play.slash",
                                            description: Text("Pick a track from your Library."))
@@ -29,6 +33,19 @@ struct NowPlayingView: View {
             }
             .navigationTitle("Now Playing")
         }
+    }
+
+    private func favoriteButton(for track: Track) -> some View {
+        Button {
+            playlistManager.toggleFavorite(for: track, currentState: isFavorite)
+            isFavorite.toggle()
+        } label: {
+            Label(isFavorite ? "Favorited" : "Favorite",
+                  systemImage: isFavorite ? "heart.fill" : "heart")
+                .foregroundStyle(.pink)
+        }
+        .buttonStyle(.bordered)
+        .tint(.pink)
     }
 
     @ViewBuilder

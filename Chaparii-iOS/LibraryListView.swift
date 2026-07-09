@@ -31,6 +31,7 @@ struct LibraryListView: View {
                             }
                         }
                         .buttonStyle(.plain)
+                        .contextMenu { trackMenu(for: track) }
                     }
                 }
             }
@@ -41,6 +42,30 @@ struct LibraryListView: View {
                 }
             }
             .refreshable { libraryManager.ensureDocumentsFolderAndScan() }
+        }
+    }
+
+    /// Shared row actions: favorite toggle + add to any user playlist.
+    @ViewBuilder
+    private func trackMenu(for track: Track) -> some View {
+        Button {
+            playlistManager.toggleFavorite(for: track, currentState: track.isFavorite)
+        } label: {
+            Label(track.isFavorite ? "Remove from Favorites" : "Favorite",
+                  systemImage: track.isFavorite ? "heart.slash" : "heart")
+        }
+
+        let userPlaylists = playlistManager.playlists.filter { $0.type != .smart }
+        if userPlaylists.isEmpty {
+            Text("No playlists yet")
+        } else {
+            Menu("Add to Playlist") {
+                ForEach(userPlaylists) { playlist in
+                    Button(playlist.name) {
+                        Task { await playlistManager.addTracksToPlaylist(tracks: [track], playlistID: playlist.id) }
+                    }
+                }
+            }
         }
     }
 }
