@@ -1,14 +1,28 @@
 # Chaparii for iOS / iPad — Plan
 
 ## Status (2026-07)
-Phase 0 and the Phase 1 MVP are **shipped and building on both platforms** (CI covers macOS +
-iOS). Done: shared-core refactor, iOS target, File Sharing ingestion (`LibraryManager+iOS.swift`,
-scan triggered at the `RootView` shell level), SFBAudioEngine playback + `AVAudioSession`
-background audio, a 5-tab shell (Library / Browse / Playlists / Search / Now Playing),
-`MiniPlayerBar`, `BrowseView` (Artists/Albums/Genres), search, and duplicate-hiding on iOS
-(`hideDuplicateTracks` default). **Remaining:** iPad `NavigationSplitView` layout; lock-screen /
-Control-Center transport polish; Phase 2 sync (Subsonic/Navidrome — see decision plan). Decision to
-keep the shared-core approach rather than adopt a third-party iOS repo is recorded and stands.
+Phase 0 and the Phase 1 MVP are **shipped and building on both platforms** (CI covers macOS + iOS).
+
+Done:
+- Shared-core refactor; iOS target; SFBAudioEngine playback + `AVAudioSession` background audio.
+- File Sharing ingestion (`LibraryManager+iOS`), **scan-once** (only re-scans on first run / after a
+  container change; refresh forces re-sync) with an `isScanning` loading banner.
+- 5-tab shell + `MiniPlayerBar` (tap-to-open, hides on the player tab).
+- Browse by Artist/Album/Genre/**Folders**; Search.
+- **Playlists**: create / rename / delete, add-to-playlist, remove-track, **Play / Shuffle** a
+  playlist; `.m3u8` auto-import (idempotent, rebuilds empties after container change).
+- **Favorites** (row + Now Playing heart); **playback resume** (track/queue/position, iOS + macOS).
+- **Now Playing** (minimal): seek bar, shuffle/repeat, "•••" Go-to-Artist/Album menu.
+- Duplicate-hiding (`hideDuplicateTracks`); `DocumentsPathResolver` + folder-prune for container
+  churn; iOS scan concurrency-cap (deadlock fix).
+
+**Remaining:** iPad `NavigationSplitView` layout; lock-screen / Control-Center transport polish;
+per-track "Play Next / Add to Queue"; Phase 2 sync (Subsonic/Navidrome — see decision plan). The
+shared-core approach (not adopting a third-party iOS repo) is decided and stands.
+
+> Note: iOS app-container UUIDs change on every (re)install, so after redeploying to a device the
+> library must re-index (handled automatically) — but a device running an old build won't have these
+> fixes until rebuilt.
 
 ## Decisions (locked with user)
 - **No spotDL / downloads** on iOS (can't spawn a binary there anyway).

@@ -74,25 +74,48 @@ The port keeps a single shared core and fences platform-specific code:
 ## iOS app (`Chaparii-iOS/`)
 
 - **Feature set is deliberately compromised** (see `docs/iOS-plan.md`): browse, playlists, search,
-  now-playing, favorites. **No tag editing, no online lookup, no downloads** (can't spawn `spotdl`).
+  now-playing, favorites, playback resume. **No tag editing, no online lookup, no downloads**
+  (can't spawn `spotdl`).
 - **UI**: `RootView.swift` is a 5-tab shell — Library, Browse, Playlists, Search, Now Playing —
   with `MiniPlayerBar` floating above the tab bar (tap it to open the player; it hides on the
-  Now Playing tab, animated). `BrowseView` groups by Artist/Album/Genre/**Folders** (the Folders
-  mode is a filesystem-style tree derived from each track's on-disk path). `NowPlayingView` has a
-  scrubbable seek bar.
+  Now Playing tab, animated).
+  - `LibraryListView` — flat track list; long-press a row to Favorite or Add to a user playlist.
+  - `BrowseView` — Artist / Album / Genre / **Folders** (Folders is a filesystem tree derived from
+    each track's on-disk path via `FolderBrowseView`).
+  - `PlaylistsListView` — create (`+`), rename/delete (swipe) user playlists; smart playlists
+    (Favorites, Top 25) are protected. Detail view has **Play / Shuffle** header buttons, per-track
+    swipe to favorite / remove, and lazily loads tracks via `getPlaylistTracks`
+    (`loadSmartPlaylistTracks` for smart ones).
+  - `NowPlayingView` — minimal: artwork, title/artist, scrubbable seek bar, prev/play/next,
+    **shuffle + repeat** (own row), a toolbar heart (favorite) and a **"•••" menu** (Go to Artist /
+    Go to Album → pushes an `EntityTracksView`).
 - **Ingestion (Phase 1, iTunes File Sharing)**: the user copies audio (+ `.m3u8`) into the app's
-  Documents via Finder/Files; `LibraryManager+iOS.swift` (`ensureDocumentsFolderAndScan`) registers
-  Documents as a library folder, scans it, and loads tracks. **Triggered once at the shell level**
-  in `RootView`'s `.task` so every tab has data regardless of which opens first. After the scan it
-  **auto-imports any `.m3u8`/`.m3u`** found in Documents (`PlaylistManager+iOS.autoImportDocuments‑
-  Playlists`), idempotent by playlist name; entry matching falls back to filename.
-- **Path stability**: `DocumentsPathResolver` rebases DB-stored absolute paths onto the live
-  Documents container on iOS (the container UUID changes across installs) — required for playback
-  and folder/path features to work after a reinstall.
-- **Duplicates**: File Sharing leaves multiple physical copies of a song. The scan's quality-scored
-  `detectAndMarkDuplicates()` flags all but the best copy (`isDuplicate`); the iOS app registers
-  `hideDuplicateTracks = true` (in `Chaparii_iOSApp.init`) so every query surfaces only the primary
-  copy. Non-destructive.
+  Documents via Finder/Files; `LibraryManager+iOS.ensureDocumentsFolderAndScan(forceRescan:)`
+  registers Documents as a library folder, scans, loads tracks, then **auto-imports `.m3u8`/`.m3u`**
+  (`PlaylistManager+iOS.autoImportDocumentsPlaylists`). Run once at the shell level in `RootView`'s
+  `.task`. **Scans only when needed** (first run / after a container change) — normal launches just
+  load from the DB; the refresh button / pull-to-refresh pass `forceRescan: true`. An `isScanning`
+  banner shows while processing.
+- **Playback resume**: `AppCoordinator` saves state on the periodic "SavePlaybackState" notification
+  and restores on launch; the iOS app also saves on scene background (`Chaparii_iOSApp` scenePhase).
+- **Playlist auto-import repair**: `autoImportDocumentsPlaylists` rebuilds a user playlist whose
+  track links were cascade-removed by a container change (deletes the empty one, re-imports);
+  populated playlists are left alone. Match is by relative path, filename fallback.
+
+### iOS gotchas (hard-won)
+
+- **Container UUID changes on every (re)install.** Absolute paths in the DB go stale. Two mitigations:
+  `DocumentsPathResolver` rebases stored paths onto the live Documents dir at decode time; and
+  `ensureDocumentsFolderAndScan` prunes stale folder rows (cascading their dead tracks) and
+  re-scans. This is why playback / playlists break until a rebuild after a reinstall.
+- **Scan concurrency deadlock (fixed):** `DMTrackProcessing.processBatch` caps parse concurrency
+  under `#if os(iOS)` — the `#available(macOS 15)` guard is false on iOS, and over-subscribing iOS's
+  small cooperative pool with blocking parses deadlocks the scan (empty library, silent hang).
+- **Duplicates**: the scan's quality-scored `detectAndMarkDuplicates()` flags all but the best copy;
+  the app registers `hideDuplicateTracks = true` so every query surfaces only the primary. Non-destructive.
+- **Simulator testing**: `simctl install` mints a new data container here, wiping seeded audio and the
+  DB — re-seed Documents after each install, and there's no tap/UI-automation tool, so verify
+  interactive flows by temporarily defaulting the tab / auto-playing, then reverting.
 - **Phase 2 (planned)**: server-side sync via the Subsonic API (Navidrome). Not yet built.
 
 ## macOS layout

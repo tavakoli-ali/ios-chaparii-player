@@ -45,10 +45,19 @@ Then read `/tmp/chaparii_ios.png` to inspect the UI.
   `open -a Simulator`, wait a few seconds, relaunch, retry.
 - **No `idb`/`cliclick` and osascript lacks accessibility access** — you cannot drive taps
   programmatically. To verify a non-default tab/screen, temporarily set the `TabView` selection
-  default (or launch state) to that tab, screenshot, then revert. Playback-dependent UI (the
-  mini-player) only renders once something is playing.
-- Library ingestion on iOS reads the app's Documents folder (iTunes File Sharing). The simulator's
-  Documents persists across installs, so previously-copied tracks remain.
+  default (or auto-play the first track / auto-open a playlist) in the view, screenshot, then revert
+  the temp edit. Playback-dependent UI (mini-player, Now Playing) only renders once something plays.
+- **`simctl install` mints a NEW data container in this environment**, wiping seeded audio and the
+  DB. After each install, re-seed and expect a fresh scan:
+  ```sh
+  CUR=$(xcrun simctl get_app_container "iPhone 17 Pro" "$BID" data)
+  cp -R "/Users/atavakoli/Downloads/HiBy_R1_Music/Arabic" "$CUR/Documents/Arabic"   # small test set
+  cp "/Users/atavakoli/Downloads/HiBy_R1_Music/Arabic.m3u8" "$CUR/Documents/"
+  ```
+  Because scan runs in background, the first launch after seeding may still be empty — **relaunch**
+  (no reinstall) so the now-indexed library loads, then screenshot. Inspect state directly with
+  `sqlite3 "$CUR/Library/Application Support/$BID/petrichor.db" "SELECT COUNT(*) FROM tracks;"`.
+- App logs: `xcrun simctl spawn "iPhone 17 Pro" log show --last 90s --info --debug --predicate 'processImagePath CONTAINS "Chaparii-iOS"' | grep 'music]'` (the app's Logger uses the `music` category; needs `--info --debug`).
 
 ## Verify a change
 
