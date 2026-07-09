@@ -4,15 +4,24 @@ import SwiftUI
 /// iPhone/iPad-native interface built on the shared managers.
 struct RootView: View {
     var body: some View {
-        TabView {
-            LibraryListView()
-                .tabItem { Label("Library", systemImage: "music.note.list") }
+        ZStack(alignment: .bottom) {
+            TabView {
+                LibraryListView()
+                    .tabItem { Label("Library", systemImage: "music.note.list") }
 
-            PlaylistsListView()
-                .tabItem { Label("Playlists", systemImage: "music.note.house") }
+                PlaylistsListView()
+                    .tabItem { Label("Playlists", systemImage: "music.note.house") }
 
-            NowPlayingView()
-                .tabItem { Label("Now Playing", systemImage: "play.circle") }
+                SearchView()
+                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
+
+                NowPlayingView()
+                    .tabItem { Label("Now Playing", systemImage: "play.circle") }
+            }
+
+            // Floats just above the tab bar while something is loaded.
+            MiniPlayerBar()
+                .padding(.bottom, 52)
         }
     }
 }
