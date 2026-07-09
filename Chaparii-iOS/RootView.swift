@@ -66,5 +66,23 @@ struct RootView: View {
                     }
             }
         }
+        // Non-blocking indicator while the shared folder is being processed.
+        .overlay(alignment: .top) {
+            if libraryManager.isScanning && !showSplash {
+                HStack(spacing: 8) {
+                    ProgressView().controlSize(.small)
+                    Text(libraryManager.scanStatusMessage.isEmpty
+                         ? "Processing shared folder…" : libraryManager.scanStatusMessage)
+                        .font(.caption).lineLimit(1)
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 9)
+                .background(.ultraThinMaterial, in: Capsule())
+                .shadow(radius: 4, y: 2)
+                .padding(.top, 6)
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.easeInOut, value: libraryManager.isScanning)
     }
 }

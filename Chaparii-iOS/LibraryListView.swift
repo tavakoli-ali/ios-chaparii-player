@@ -8,7 +8,14 @@ struct LibraryListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if libraryManager.tracks.isEmpty {
+                if libraryManager.isScanning && libraryManager.tracks.isEmpty {
+                    VStack(spacing: 14) {
+                        ProgressView()
+                        Text(libraryManager.scanStatusMessage.isEmpty
+                             ? "Processing shared folder…" : libraryManager.scanStatusMessage)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if libraryManager.tracks.isEmpty {
                     ContentUnavailableView(
                         "No Music",
                         systemImage: "music.note",
@@ -38,10 +45,19 @@ struct LibraryListView: View {
             .navigationTitle("Library")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { libraryManager.ensureDocumentsFolderAndScan() } label: { Image(systemName: "arrow.clockwise") }
+                    Button { resync() } label: { Image(systemName: "arrow.clockwise") }
+                        .disabled(libraryManager.isScanning)
                 }
             }
-            .refreshable { libraryManager.ensureDocumentsFolderAndScan() }
+            .refreshable { resync() }
+        }
+    }
+
+    /// Explicit user-triggered re-sync: forces a fresh scan of the shared folder
+    /// and re-imports playlists.
+    private func resync() {
+        libraryManager.ensureDocumentsFolderAndScan(forceRescan: true) {
+            await playlistManager.autoImportDocumentsPlaylists()
         }
     }
 

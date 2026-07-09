@@ -3,10 +3,18 @@ import Foundation
 
 extension LibraryManager {
     /// On iOS the library source is the app's own Documents folder, populated by
-    /// the user via File Sharing (Finder / Files app). Registers Documents as a
-    /// library folder (once), scans it, then loads tracks into memory. Safe to call
-    /// repeatedly (launch + pull-to-refresh).
-    func ensureDocumentsFolderAndScan(onScanComplete: (@MainActor () async -> Void)? = nil) {
+    /// the user via File Sharing (Finder / Files app).
+    ///
+    /// Called on launch with `forceRescan == false`: it only does the expensive
+    /// folder scan when needed — first run, or after a reinstall changed the
+    /// container — and otherwise just loads the already-indexed tracks from the DB
+    /// (fast, no reprocessing). Called from the refresh control with
+    /// `forceRescan == true` to re-sync on demand. `isScanning` drives the UI
+    /// loading indicator; it's only raised while an actual scan runs.
+    func ensureDocumentsFolderAndScan(
+        forceRescan: Bool = false,
+        onScanComplete: (@MainActor () async -> Void)? = nil
+    ) {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].standardizedFileURL
 
         Task { @MainActor in
@@ -28,6 +36,17 @@ extension LibraryManager {
                 Logger.info("iOS: pruned \(stale.count) stale Documents folder(s) from a prior install")
             }
 
+            // Fast path: the current Documents is already registered and indexed, and
+            // the caller didn't ask for a re-sync — just load the existing tracks.
+            if !forceRescan,
+               let current = folders.first(where: { $0.url.standardizedFileURL.path == docs.path }),
+               let folderId = current.id,
+               !databaseManager.getTracksForFolder(folderId).isEmpty {
+                await reloadTracksFromDatabase()
+                await onScanComplete?()
+                return
+            }
+
             // Ensure exactly one folder registration for the current Documents.
             let folder: Folder
             if let existing = folders.first(where: { $0.url.standardizedFileURL.path == docs.path }) {
@@ -47,6 +66,8 @@ extension LibraryManager {
             }
 
             // Scan the folder (await completion) then load tracks into memory.
+            // refreshFolder toggles `isScanning`, which the UI observes for the
+            // loading indicator.
             await withCheckedContinuation { continuation in
                 databaseManager.refreshFolder(
                     folder,
