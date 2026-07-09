@@ -40,7 +40,6 @@ struct LibraryListView: View {
                     Button { libraryManager.ensureDocumentsFolderAndScan() } label: { Image(systemName: "arrow.clockwise") }
                 }
             }
-            .task { libraryManager.ensureDocumentsFolderAndScan() }
             .refreshable { libraryManager.ensureDocumentsFolderAndScan() }
         }
     }
