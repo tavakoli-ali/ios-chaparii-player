@@ -22,12 +22,36 @@ extension PlaylistManager {
         }
         guard !playlistURLs.isEmpty else { return }
 
-        let existing = Set(playlists.map { $0.name.lowercased() })
+        let fileNames = Set(playlistURLs.map { $0.deletingPathExtension().lastPathComponent.lowercased() })
+
+        // Decide what to (re)import. A regular playlist that already has tracks is
+        // left alone. A regular playlist that exists but is EMPTY and matches an
+        // incoming file is stale — its track links were cascade-removed when the
+        // iOS container changed and the library was re-scanned under new track IDs.
+        // Delete those so the import rebuilds them from the .m3u8 (otherwise a
+        // name-only "already imported" check leaves them permanently empty).
+        var populated = Set<String>()
+        var staleEmpty: [Playlist] = []
+        if let db = libraryManager?.databaseManager {
+            for playlist in playlists where playlist.type != .smart {
+                let nameKey = playlist.name.lowercased()
+                if !db.loadTracksForPlaylist(playlist.id).isEmpty {
+                    populated.insert(nameKey)
+                } else if fileNames.contains(nameKey) {
+                    staleEmpty.append(playlist)
+                }
+            }
+        }
+        for playlist in staleEmpty {
+            Logger.info("iOS: rebuilding empty playlist '\(playlist.name)' from its file")
+            deletePlaylist(playlist)
+        }
+
         let toImport = playlistURLs.filter {
-            !existing.contains($0.deletingPathExtension().lastPathComponent.lowercased())
+            !populated.contains($0.deletingPathExtension().lastPathComponent.lowercased())
         }
         guard !toImport.isEmpty else {
-            Logger.info("iOS: \(playlistURLs.count) playlist file(s) present, all already imported")
+            Logger.info("iOS: \(playlistURLs.count) playlist file(s) present, all already populated")
             return
         }
 

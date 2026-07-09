@@ -25,6 +25,7 @@ class AppCoordinator: ObservableObject {
     // Track restoration state to prevent race conditions
     private var isRestoringPlayback = false
     private var libraryObserver: NSObjectProtocol?
+    private var stateSaveObserver: NSObjectProtocol?
     
     // MARK: - Initialization
     
@@ -54,7 +55,19 @@ class AppCoordinator: ObservableObject {
         hadFoldersAtStartup = !libraryManager.folders.isEmpty
         
         Self.shared = self
-        
+
+        // The 5s playback timer and track changes post "SavePlaybackState"; persist
+        // on it so an interrupted session (crash, force-quit, or an iOS background
+        // kill) still resumes where it left off. macOS additionally saves on quit /
+        // window-close; iOS saves on scene-background (see Chaparii_iOSApp).
+        stateSaveObserver = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("SavePlaybackState"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.savePlaybackState(for: true)
+        }
+
         // Check if library is empty at startup - if so, clear any saved state
         if !hadFoldersAtStartup {
             clearAllSavedState()
@@ -72,6 +85,9 @@ class AppCoordinator: ObservableObject {
     deinit {
         // Clean up any remaining observers
         if let observer = libraryObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = stateSaveObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
