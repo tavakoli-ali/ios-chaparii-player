@@ -61,11 +61,20 @@ extension DatabaseManager {
         // recovers, so only 14 needs headroom.
         let cores = ProcessInfo.processInfo.activeProcessorCount
         let maxConcurrent: Int
+        #if os(iOS)
+        // iOS's cooperative thread pool is small; each parse briefly blocks on
+        // GRDB/artwork work, so priming a large group saturates the pool and the
+        // scan deadlocks (same failure class as the macOS 14 note below — the
+        // `#available(macOS 15)` guard never covers iOS). Stay well below the pool
+        // size: a big library scan then completes instead of hanging with 0 tracks.
+        maxConcurrent = max(2, min(4, cores - 1))
+        #else
         if #available(macOS 15, *) {
             maxConcurrent = max(4, cores)
         } else {
             maxConcurrent = max(2, cores / 2)
         }
+        #endif
 
         Logger.info("Processing batch of \(batch.count) files in chunks of \(chunkSize), up to \(maxConcurrent) concurrent")
 

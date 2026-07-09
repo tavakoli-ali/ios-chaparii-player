@@ -7,11 +7,30 @@ extension LibraryManager {
     /// library folder (once), scans it, then loads tracks into memory. Safe to call
     /// repeatedly (launch + pull-to-refresh).
     func ensureDocumentsFolderAndScan(onScanComplete: (@MainActor () async -> Void)? = nil) {
-        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].standardizedFileURL
 
         Task { @MainActor in
+            // Self-heal: iOS changes the app's Documents container path on every
+            // (re)install, which leaves stale folder rows behind (each pointing at a
+            // dead container) and their track rows carrying dead absolute paths.
+            // Keep only the folder for the *current* Documents; remove the rest,
+            // which cascades their tracks. `folder.url` is the raw stored path (not
+            // the resolved bookmark), so this reliably identifies stale rows.
+            let stale = folders.filter { $0.url.standardizedFileURL.path != docs.path }
+            for folder in stale {
+                await withCheckedContinuation { continuation in
+                    databaseManager.removeFolder(folder) { _ in continuation.resume() }
+                }
+            }
+            if !stale.isEmpty {
+                let staleIds = Set(stale.compactMap { $0.id })
+                folders.removeAll { staleIds.contains($0.id ?? -1) }
+                Logger.info("iOS: pruned \(stale.count) stale Documents folder(s) from a prior install")
+            }
+
+            // Ensure exactly one folder registration for the current Documents.
             let folder: Folder
-            if let existing = folders.first(where: { $0.url.standardizedFileURL == docs.standardizedFileURL }) {
+            if let existing = folders.first(where: { $0.url.standardizedFileURL.path == docs.path }) {
                 folder = existing
             } else {
                 let bookmark = try? docs.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
