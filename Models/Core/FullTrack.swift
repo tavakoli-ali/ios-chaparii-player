@@ -147,7 +147,7 @@ struct FullTrack: Identifiable, Equatable, Hashable, FetchableRecord, Persistabl
     init(row: Row) throws {
         // Extract path and create URL
         let path: String = row[Columns.path]
-        self.url = URL(fileURLWithPath: path)
+        self.url = URL(fileURLWithPath: DocumentsPathResolver.resolve(path))
         self.format = row[Columns.format]
         
         // Core properties
