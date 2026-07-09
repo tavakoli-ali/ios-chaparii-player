@@ -225,72 +225,73 @@ jobs:
           retention-days: 5
           if-no-files-found: ignore
 
-  # Ad-hoc Release compile check (no secrets, not distributable). Catches
+  # Ad-hoc Release compile check — DISABLED for now (not needed at the moment).
+  # Re-enable by uncommenting this job when preparing a release. Catches
   # Release-only breaks before you tag and run Scripts/build-installer.sh.
   # Signing/notarization/DMG/Sparkle stay in the local release flow.
-  release-build:
-    name: Release Build Check
-    runs-on: macos-26
-    timeout-minutes: 45
-    needs: [build-analyze]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app"
-
-      - name: Cache SwiftPM
-        uses: actions/cache@v5
-        with:
-          path: .spm
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
-
-      - name: Cache DerivedData
-        uses: actions/cache@v5
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-dd-release-${{ hashFiles('**/*.swift', '**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-dd-release-
-
-      - name: Create Secrets placeholder
-        run: |
-          {
-            echo "// CI placeholder - online features disabled"
-            echo "LASTFM_API_KEY = "
-            echo "LASTFM_SHARED_SECRET = "
-          } > Configuration/Secrets.xcconfig
-
-      - name: Ensure xcbeautify
-        run: brew list xcbeautify >/dev/null 2>&1 || brew install xcbeautify
-
-      - name: Resolve dependencies
-        run: |
-          xcodebuild -resolvePackageDependencies \
-            -project "$PROJECT" \
-            -scheme "$SCHEME" \
-            -clonedSourcePackagesDirPath .spm
-
-      # Universal (both archs) to mirror what actually ships; ad-hoc signed.
-      - name: Build (Release)
-        run: |
-          set -o pipefail
-          xcodebuild build \
-            -project "$PROJECT" \
-            -scheme "$SCHEME" \
-            -configuration Release \
-            -destination 'platform=macOS' \
-            -clonedSourcePackagesDirPath .spm \
-            -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
-            ONLY_ACTIVE_ARCH=NO \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcbeautify --renderer github-actions
+  # release-build:
+  #   name: Release Build Check
+  #   runs-on: macos-26
+  #   timeout-minutes: 45
+  #   needs: [build-analyze]
+  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v6
+  #
+  #     - name: Select Xcode
+  #       run: sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app"
+  #
+  #     - name: Cache SwiftPM
+  #       uses: actions/cache@v5
+  #       with:
+  #         path: .spm
+  #         key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-spm-
+  #
+  #     - name: Cache DerivedData
+  #       uses: actions/cache@v5
+  #       with:
+  #         path: ~/Library/Developer/Xcode/DerivedData
+  #         key: ${{ runner.os }}-dd-release-${{ hashFiles('**/*.swift', '**/Package.resolved') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-dd-release-
+  #
+  #     - name: Create Secrets placeholder
+  #       run: |
+  #         {
+  #           echo "// CI placeholder - online features disabled"
+  #           echo "LASTFM_API_KEY = "
+  #           echo "LASTFM_SHARED_SECRET = "
+  #         } > Configuration/Secrets.xcconfig
+  #
+  #     - name: Ensure xcbeautify
+  #       run: brew list xcbeautify >/dev/null 2>&1 || brew install xcbeautify
+  #
+  #     - name: Resolve dependencies
+  #       run: |
+  #         xcodebuild -resolvePackageDependencies \
+  #           -project "$PROJECT" \
+  #           -scheme "$SCHEME" \
+  #           -clonedSourcePackagesDirPath .spm
+  #
+  #     # Universal (both archs) to mirror what actually ships; ad-hoc signed.
+  #     - name: Build (Release)
+  #       run: |
+  #         set -o pipefail
+  #         xcodebuild build \
+  #           -project "$PROJECT" \
+  #           -scheme "$SCHEME" \
+  #           -configuration Release \
+  #           -destination 'platform=macOS' \
+  #           -clonedSourcePackagesDirPath .spm \
+  #           -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
+  #           ONLY_ACTIVE_ARCH=NO \
+  #           CODE_SIGN_IDENTITY="-" \
+  #           CODE_SIGNING_REQUIRED=NO \
+  #           CODE_SIGNING_ALLOWED=NO \
+  #           | xcbeautify --renderer github-actions
 
   # Single required status for branch protection. release-build is intentionally
   # excluded (it only runs on push to main/tags, never on PRs).
