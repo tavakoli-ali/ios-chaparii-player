@@ -86,6 +86,25 @@ private struct PlaylistTracksView: View {
 
     var body: some View {
         List {
+            if !tracks.isEmpty {
+                Section {
+                    HStack(spacing: 12) {
+                        Button { playAll(shuffled: false) } label: {
+                            Label("Play", systemImage: "play.fill").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+
+                        Button { playAll(shuffled: true) } label: {
+                            Label("Shuffle", systemImage: "shuffle").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 8, trailing: 16))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                }
+            }
+
             ForEach(tracks) { track in
                 Button {
                     playlistManager.playTrack(track, fromTracks: tracks)
@@ -133,6 +152,15 @@ private struct PlaylistTracksView: View {
         }
         .navigationTitle(DefaultPlaylists.displayName(for: playlist))
         .task { await reload() }
+    }
+
+    /// Play the whole playlist. `shuffled` turns on shuffle mode (reflected in Now
+    /// Playing) and starts from a random track; otherwise plays in order from the top.
+    private func playAll(shuffled: Bool) {
+        guard !tracks.isEmpty else { return }
+        playlistManager.isShuffleEnabled = shuffled
+        let start = shuffled ? (tracks.randomElement() ?? tracks[0]) : tracks[0]
+        playlistManager.playTrack(start, fromTracks: tracks)
     }
 
     @MainActor
