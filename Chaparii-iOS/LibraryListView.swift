@@ -37,9 +37,11 @@ struct LibraryListView: View {
             .navigationTitle("Library")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { libraryManager.refreshLibrary() } label: { Image(systemName: "arrow.clockwise") }
+                    Button { libraryManager.ensureDocumentsFolderAndScan() } label: { Image(systemName: "arrow.clockwise") }
                 }
             }
+            .task { libraryManager.ensureDocumentsFolderAndScan() }
+            .refreshable { libraryManager.ensureDocumentsFolderAndScan() }
         }
     }
 }
