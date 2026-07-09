@@ -7,6 +7,8 @@ struct RootView: View {
     @State private var selection = 0
     @State private var showSplash = true
 
+    private let nowPlayingTab = 4
+
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $selection) {
@@ -31,10 +33,20 @@ struct RootView: View {
                     .tag(4)
             }
 
-            // Floats just above the tab bar while something is loaded.
-            MiniPlayerBar()
+            // Floats just above the tab bar while something is loaded — except on
+            // the Now Playing tab, where the full player replaces it. Tapping it
+            // opens the player; leaving the player brings it back. Both animate.
+            if selection != nowPlayingTab {
+                MiniPlayerBar {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                        selection = nowPlayingTab
+                    }
+                }
                 .padding(.bottom, 52)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
+        .animation(.spring(response: 0.4, dampingFraction: 0.85), value: selection)
         // Load the library once at the shell level so every tab (Browse, Search,
         // …) has data regardless of which one is shown first.
         .task { libraryManager.ensureDocumentsFolderAndScan() }

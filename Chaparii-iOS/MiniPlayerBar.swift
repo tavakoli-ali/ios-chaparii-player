@@ -1,8 +1,12 @@
 import SwiftUI
 
 /// Persistent now-playing strip shown above the tab bar whenever something is loaded.
+/// Tapping anywhere except the play/pause button invokes `onTap` (opens the player).
 struct MiniPlayerBar: View {
     @EnvironmentObject var playbackManager: PlaybackManager
+
+    /// Called when the bar (not the play/pause button) is tapped.
+    var onTap: () -> Void = {}
 
     var body: some View {
         if let track = playbackManager.currentTrack {
@@ -26,6 +30,9 @@ struct MiniPlayerBar: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .shadow(radius: 4, y: 2)
             .padding(.horizontal, 8)
+            // Tap the strip (outside the button) to open the full player.
+            .contentShape(Rectangle())
+            .onTapGesture { onTap() }
         }
     }
 
