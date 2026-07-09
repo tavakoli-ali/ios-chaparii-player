@@ -76,11 +76,19 @@ The port keeps a single shared core and fences platform-specific code:
 - **Feature set is deliberately compromised** (see `docs/iOS-plan.md`): browse, playlists, search,
   now-playing, favorites. **No tag editing, no online lookup, no downloads** (can't spawn `spotdl`).
 - **UI**: `RootView.swift` is a 5-tab shell — Library, Browse, Playlists, Search, Now Playing —
-  with `MiniPlayerBar` floating above the tab bar. `BrowseView` groups by Artist/Album/Genre.
+  with `MiniPlayerBar` floating above the tab bar (tap it to open the player; it hides on the
+  Now Playing tab, animated). `BrowseView` groups by Artist/Album/Genre/**Folders** (the Folders
+  mode is a filesystem-style tree derived from each track's on-disk path). `NowPlayingView` has a
+  scrubbable seek bar.
 - **Ingestion (Phase 1, iTunes File Sharing)**: the user copies audio (+ `.m3u8`) into the app's
   Documents via Finder/Files; `LibraryManager+iOS.swift` (`ensureDocumentsFolderAndScan`) registers
   Documents as a library folder, scans it, and loads tracks. **Triggered once at the shell level**
-  in `RootView`'s `.task` so every tab has data regardless of which opens first.
+  in `RootView`'s `.task` so every tab has data regardless of which opens first. After the scan it
+  **auto-imports any `.m3u8`/`.m3u`** found in Documents (`PlaylistManager+iOS.autoImportDocuments‑
+  Playlists`), idempotent by playlist name; entry matching falls back to filename.
+- **Path stability**: `DocumentsPathResolver` rebases DB-stored absolute paths onto the live
+  Documents container on iOS (the container UUID changes across installs) — required for playback
+  and folder/path features to work after a reinstall.
 - **Duplicates**: File Sharing leaves multiple physical copies of a song. The scan's quality-scored
   `detectAndMarkDuplicates()` flags all but the best copy (`isDuplicate`); the iOS app registers
   `hideDuplicateTracks = true` (in `Chaparii_iOSApp.init`) so every query surfaces only the primary

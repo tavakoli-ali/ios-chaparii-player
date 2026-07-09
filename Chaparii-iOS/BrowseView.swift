@@ -10,6 +10,7 @@ struct BrowseView: View {
         case artists = "Artists"
         case albums = "Albums"
         case genres = "Genres"
+        case folders = "Folders"
         var id: String { rawValue }
     }
 
@@ -27,6 +28,7 @@ struct BrowseView: View {
                 case .artists: BrowseList(field: .artist)
                 case .albums:  BrowseList(field: .album)
                 case .genres:  BrowseList(field: .genre)
+                case .folders: FolderBrowseView(components: [])
                 }
             }
             .navigationTitle("Browse")
@@ -143,5 +145,104 @@ struct EntityTracksView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// Filesystem-style browser over the library's Documents tree. Shows the folders
+/// (languages → albums → …) and any tracks directly at the current level, derived
+/// from each track's on-disk path. Drilling in pushes deeper into the same stack.
+struct FolderBrowseView: View {
+    @EnvironmentObject var libraryManager: LibraryManager
+    @EnvironmentObject var playlistManager: PlaylistManager
+    @EnvironmentObject var playbackManager: PlaybackManager
+
+    /// Path prefix (relative to Documents) of the folder being shown.
+    let components: [String]
+
+    private static let docsPath: String =
+        (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+            .standardizedFileURL.path ?? "")
+
+    /// Track's path components relative to Documents (last element is the filename).
+    private func relative(_ track: Track) -> [String] {
+        let base = Self.docsPath
+        let path = track.url.standardizedFileURL.path
+        guard !base.isEmpty, path.hasPrefix(base) else { return [] }
+        return path.dropFirst(base.count).split(separator: "/").map(String.init)
+    }
+
+    /// Tracks whose path sits at or below the current folder.
+    private var descendants: [Track] {
+        libraryManager.tracks.filter { track in
+            let r = relative(track)
+            return r.count > components.count && Array(r.prefix(components.count)) == components
+        }
+    }
+
+    private var subfolders: [String] {
+        var seen = Set<String>()
+        var ordered: [String] = []
+        for track in descendants {
+            let r = relative(track)
+            if r.count > components.count + 1 {   // a folder, not a file, at this level
+                let name = r[components.count]
+                if seen.insert(name).inserted { ordered.append(name) }
+            }
+        }
+        return ordered.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+    }
+
+    private var tracksHere: [Track] {
+        descendants
+            .filter { relative($0).count == components.count + 1 }
+            .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+    }
+
+    var body: some View {
+        Group {
+            if subfolders.isEmpty && tracksHere.isEmpty {
+                ContentUnavailableView("Empty Folder", systemImage: "folder",
+                                       description: Text("No tracks here."))
+            } else {
+                List {
+                    if !subfolders.isEmpty {
+                        Section {
+                            ForEach(subfolders, id: \.self) { folder in
+                                NavigationLink {
+                                    FolderBrowseView(components: components + [folder])
+                                        .navigationTitle(folder)
+                                        .navigationBarTitleDisplayMode(.inline)
+                                } label: {
+                                    Label(folder, systemImage: "folder.fill")
+                                }
+                            }
+                        }
+                    }
+                    if !tracksHere.isEmpty {
+                        Section {
+                            ForEach(tracksHere) { track in
+                                Button {
+                                    playlistManager.playTrack(track, fromTracks: tracksHere)
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "music.note").foregroundStyle(.secondary)
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(track.title).lineLimit(1)
+                                            Text(track.artist).font(.caption)
+                                                .foregroundStyle(.secondary).lineLimit(1)
+                                        }
+                                        Spacer()
+                                        if playbackManager.currentTrack?.trackId == track.trackId {
+                                            Image(systemName: "speaker.wave.2.fill").foregroundStyle(.tint)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

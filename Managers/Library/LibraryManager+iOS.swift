@@ -6,7 +6,7 @@ extension LibraryManager {
     /// the user via File Sharing (Finder / Files app). Registers Documents as a
     /// library folder (once), scans it, then loads tracks into memory. Safe to call
     /// repeatedly (launch + pull-to-refresh).
-    func ensureDocumentsFolderAndScan() {
+    func ensureDocumentsFolderAndScan(onScanComplete: (@MainActor () async -> Void)? = nil) {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 
         Task { @MainActor in
@@ -38,6 +38,7 @@ extension LibraryManager {
             }
 
             await reloadTracksFromDatabase()
+            await onScanComplete?()
         }
     }
 

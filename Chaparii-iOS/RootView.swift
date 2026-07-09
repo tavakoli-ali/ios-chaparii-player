@@ -4,6 +4,7 @@ import SwiftUI
 /// iPhone/iPad-native interface built on the shared managers.
 struct RootView: View {
     @EnvironmentObject var libraryManager: LibraryManager
+    @EnvironmentObject var playlistManager: PlaylistManager
     @State private var selection = 0
     @State private var showSplash = true
 
@@ -48,8 +49,13 @@ struct RootView: View {
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: selection)
         // Load the library once at the shell level so every tab (Browse, Search,
-        // …) has data regardless of which one is shown first.
-        .task { libraryManager.ensureDocumentsFolderAndScan() }
+        // …) has data regardless of which one is shown first, then auto-import any
+        // .m3u8 playlists that were copied into Documents alongside the audio.
+        .task {
+            libraryManager.ensureDocumentsFolderAndScan {
+                await playlistManager.autoImportDocumentsPlaylists()
+            }
+        }
         .overlay {
             if showSplash {
                 SplashView()
