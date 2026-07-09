@@ -3,6 +3,10 @@ import SwiftUI
 struct NowPlayingView: View {
     @EnvironmentObject var playbackManager: PlaybackManager
     @EnvironmentObject var playlistManager: PlaylistManager
+    @EnvironmentObject var playbackProgressState: PlaybackProgressState
+
+    @State private var isScrubbing = false
+    @State private var scrubValue: Double = 0
 
     var body: some View {
         NavigationStack {
@@ -14,6 +18,7 @@ struct NowPlayingView: View {
                             Text(track.title).font(.title3).bold().multilineTextAlignment(.center)
                             Text(track.artist).foregroundStyle(.secondary)
                         }
+                        seekBar(for: track)
                         transport
                     }
                     .padding()
@@ -38,6 +43,33 @@ struct NowPlayingView: View {
                 .fill(.quaternary)
                 .frame(width: 280, height: 280)
                 .overlay(Image(systemName: "music.note").font(.system(size: 64)).foregroundStyle(.secondary))
+        }
+    }
+
+    /// Scrubbable seek bar. Shows live progress while playing; on drag it tracks
+    /// the finger and commits the new position to the engine on release.
+    @ViewBuilder
+    private func seekBar(for track: Track) -> some View {
+        let duration = max(track.duration, 0.01)
+        let current = min(isScrubbing ? scrubValue : playbackProgressState.currentTime, duration)
+        VStack(spacing: 2) {
+            Slider(
+                value: Binding(get: { current }, set: { scrubValue = $0 }),
+                in: 0...duration
+            ) { editing in
+                if editing {
+                    scrubValue = min(playbackProgressState.currentTime, duration)
+                } else {
+                    playbackManager.seekTo(time: scrubValue)
+                }
+                isScrubbing = editing
+            }
+            HStack {
+                Text(HelperUtils.formattedDuration(current))
+                Spacer()
+                Text(HelperUtils.formattedDuration(duration))
+            }
+            .font(.caption2).monospacedDigit().foregroundStyle(.secondary)
         }
     }
 

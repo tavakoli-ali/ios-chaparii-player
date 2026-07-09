@@ -5,6 +5,7 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject var libraryManager: LibraryManager
     @State private var selection = 0
+    @State private var showSplash = true
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -37,5 +38,15 @@ struct RootView: View {
         // Load the library once at the shell level so every tab (Browse, Search,
         // …) has data regardless of which one is shown first.
         .task { libraryManager.ensureDocumentsFolderAndScan() }
+        .overlay {
+            if showSplash {
+                SplashView()
+                    .transition(.opacity)
+                    .task {
+                        try? await Task.sleep(nanoseconds: 1_900_000_000)
+                        withAnimation(.easeOut(duration: 0.45)) { showSplash = false }
+                    }
+            }
+        }
     }
 }

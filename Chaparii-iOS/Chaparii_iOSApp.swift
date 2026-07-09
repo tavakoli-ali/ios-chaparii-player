@@ -27,6 +27,7 @@ struct Chaparii_iOSApp: App {
                 .environmentObject(coordinator.libraryManager)
                 .environmentObject(coordinator.playlistManager)
                 .environmentObject(coordinator.playbackManager)
+                .environmentObject(coordinator.playbackManager.playbackProgressState)
         }
     }
 }
