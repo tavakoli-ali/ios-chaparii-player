@@ -88,33 +88,6 @@ enum TrackContextMenu {
         return items
     }
     
-    static func createPlayerViewMenuItems(
-        for track: Track,
-        playlistManager: PlaylistManager
-    ) -> [ContextMenuItem] {
-        var items: [ContextMenuItem] = []
-        
-        // Add info item
-        items.append(createShowInfoItem(for: track))
-        
-        items.append(createRevealInFinderItem(for: track))
-        
-        items.append(.divider)
-        
-        // Add "Go to" submenu
-        items.append(createGoToMenu(for: track))
-        
-        items.append(.divider)
-        
-        // Add playlist items
-        items.append(contentsOf: createPlaylistItems(
-            for: track,
-            playlistManager: playlistManager
-        ))
-        
-        return items
-    }
-    
     // MARK: - Helper Methods
     
     private static func createPlaybackItems(

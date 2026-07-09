@@ -21,6 +21,8 @@ struct SidebarView<Item: SidebarItem>: View {
     // Reordering
     let reorderableFromIndex: Int?
     let onReorder: (([Item]) -> Void)?
+    let onDropTracks: ((Item) -> Void)?
+    let multiSelection: Binding<Set<UUID>>?
 
     init(
         items: [Item],
@@ -34,7 +36,9 @@ struct SidebarView<Item: SidebarItem>: View {
         showCount: Bool = false,
         trailingContent: ((Item) -> AnyView)? = nil,
         reorderableFromIndex: Int? = nil,
-        onReorder: (([Item]) -> Void)? = nil
+        onReorder: (([Item]) -> Void)? = nil,
+        onDropTracks: ((Item) -> Void)? = nil,
+        multiSelection: Binding<Set<UUID>>? = nil
     ) {
         self.items = items
         self._selectedItem = selectedItem
@@ -48,6 +52,8 @@ struct SidebarView<Item: SidebarItem>: View {
         self.trailingContent = trailingContent
         self.reorderableFromIndex = reorderableFromIndex
         self.onReorder = onReorder
+        self.onDropTracks = onDropTracks
+        self.multiSelection = multiSelection
     }
 
     var body: some View {
@@ -63,7 +69,9 @@ struct SidebarView<Item: SidebarItem>: View {
             showCount: showCount,
             trailingContent: trailingContent,
             reorderableFromIndex: reorderableFromIndex,
-            onReorder: onReorder
+            onReorder: onReorder,
+            onDropTracks: onDropTracks,
+            multiSelection: multiSelection
         )
     }
 }

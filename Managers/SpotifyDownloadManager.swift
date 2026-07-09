@@ -125,7 +125,10 @@ final class SpotifyDownloadManager: ObservableObject {
         case .topTracks:
             let artist = try await resolveArtist(from: query)
             appendLog("Matched artist: \(artist.name)")
-            let tracks = try await SpotifyAPI.topTracks(artistId: artist.id, token: try await token())
+            // The /artists/{id}/top-tracks endpoint is Forbidden (403) for
+            // Client-Credentials apps, so approximate "top tracks" with a
+            // relevance-ranked track search scoped to the artist, which is allowed.
+            let tracks = try await SpotifyAPI.searchTopTracks(artistName: artist.name, token: try await token())
             guard !tracks.isEmpty else { throw SpotifyDownloadError.nothingFound }
             appendLog("Top tracks: \(tracks.map(\.name).joined(separator: ", "))")
             return ["download"] + tracks.map(\.url)
@@ -133,8 +136,9 @@ final class SpotifyDownloadManager: ObservableObject {
         case .topAlbum:
             let artist = try await resolveArtist(from: query)
             appendLog("Matched artist: \(artist.name)")
-            let album = try await SpotifyAPI.mostPopularAlbum(artistId: artist.id, token: try await token())
-            appendLog("Most popular album: \(album.name)")
+            // Same restriction on /artists/{id}/albums — use album search instead.
+            let album = try await SpotifyAPI.searchTopAlbum(artistName: artist.name, token: try await token())
+            appendLog("Album: \(album.name)")
             return ["download", album.url]
         }
     }
@@ -388,47 +392,55 @@ enum SpotifyAPI {
         return Track(name: item.name, url: item.externalUrls.spotify, artists: item.artists)
     }
 
-    static func topTracks(artistId: String, token: String) async throws -> [Track] {
-        let url = URL(string: "https://api.spotify.com/v1/artists/\(artistId)/top-tracks?market=US")!
+    /// Approximates an artist's top tracks with a relevance-ranked track search
+    /// (`q=artist:"Name"`). Spotify orders search results by popularity/relevance,
+    /// and unlike `/artists/{id}/top-tracks` this endpoint is available to
+    /// Client-Credentials apps.
+    static func searchTopTracks(artistName: String, token: String, limit: Int = 10) async throws -> [Track] {
+        var components = URLComponents(string: "https://api.spotify.com/v1/search")!
+        components.queryItems = [
+            URLQueryItem(name: "q", value: "artist:\(artistName)"),
+            URLQueryItem(name: "type", value: "track"),
+            URLQueryItem(name: "limit", value: String(limit))
+        ]
 
-        struct TopTracksResponse: Decodable { let tracks: [TrackItem] }
-        let response: TopTracksResponse = try await decode(
-            request: authorizedRequest(url: url, token: token),
+        struct SearchResponse: Decodable {
+            struct Tracks: Decodable { let items: [TrackItem] }
+            let tracks: Tracks
+        }
+        let response: SearchResponse = try await decode(
+            request: authorizedRequest(url: components.url!, token: token),
             errorContext: "top tracks"
         )
-        return response.tracks.map { Track(name: $0.name, url: $0.externalUrls.spotify, artists: $0.artists) }
+        return response.tracks.items.map { Track(name: $0.name, url: $0.externalUrls.spotify, artists: $0.artists) }
     }
 
-    /// The artist's albums ranked by Spotify's per-album popularity score.
-    static func mostPopularAlbum(artistId: String, token: String) async throws -> Album {
-        let listUrl = URL(string: "https://api.spotify.com/v1/artists/\(artistId)/albums?include_groups=album&limit=20")!
+    /// The artist's most relevant full album via album search (the
+    /// `/artists/{id}/albums` + per-album popularity path is Forbidden for
+    /// Client-Credentials apps). Prefers a proper album over singles/EPs.
+    static func searchTopAlbum(artistName: String, token: String) async throws -> Album {
+        var components = URLComponents(string: "https://api.spotify.com/v1/search")!
+        components.queryItems = [
+            URLQueryItem(name: "q", value: "artist:\(artistName)"),
+            URLQueryItem(name: "type", value: "album"),
+            URLQueryItem(name: "limit", value: "10")
+        ]
 
-        struct AlbumsResponse: Decodable {
-            struct Item: Decodable { let id: String }
-            let items: [Item]
+        struct SearchResponse: Decodable {
+            struct Albums: Decodable { let items: [AlbumItem] }
+            let albums: Albums
         }
-        let list: AlbumsResponse = try await decode(
-            request: authorizedRequest(url: listUrl, token: token),
+        struct AlbumItem: Decodable {
+            let name: String
+            let albumType: String?
+            let externalUrls: ExternalUrls
+        }
+        let response: SearchResponse = try await decode(
+            request: authorizedRequest(url: components.url!, token: token),
             errorContext: "albums"
         )
-        guard !list.items.isEmpty else { throw SpotifyDownloadError.nothingFound }
-
-        let ids = list.items.map(\.id).joined(separator: ",")
-        let detailUrl = URL(string: "https://api.spotify.com/v1/albums?ids=\(ids)")!
-
-        struct AlbumDetailsResponse: Decodable {
-            struct Detail: Decodable {
-                let name: String
-                let popularity: Int
-                let externalUrls: ExternalUrls
-            }
-            let albums: [Detail]
-        }
-        let details: AlbumDetailsResponse = try await decode(
-            request: authorizedRequest(url: detailUrl, token: token),
-            errorContext: "album details"
-        )
-        guard let best = details.albums.max(by: { $0.popularity < $1.popularity }) else {
+        let items = response.albums.items
+        guard let best = items.first(where: { $0.albumType == "album" }) ?? items.first else {
             throw SpotifyDownloadError.nothingFound
         }
         return Album(name: best.name, url: best.externalUrls.spotify)
@@ -454,6 +466,8 @@ enum SpotifyAPI {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            let body = String(data: data, encoding: .utf8) ?? "<non-utf8>"
+            Logger.error("SpotifyAPI \(errorContext) failed: HTTP \(status), url=\(request.url?.absoluteString ?? "?"), body=\(body)")
             throw SpotifyDownloadError.apiFailure("\(errorContext) failed (HTTP \(status))")
         }
         let decoder = JSONDecoder()

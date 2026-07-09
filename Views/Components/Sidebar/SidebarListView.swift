@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 // MARK: - Sidebar List View
 
@@ -22,9 +23,17 @@ struct SidebarListView<Item: SidebarItem>: View {
     let reorderableFromIndex: Int?
     let onReorder: (([Item]) -> Void)?
 
+    // Dropping tracks onto an item (e.g. add dragged tracks to a playlist)
+    let onDropTracks: ((Item) -> Void)?
+
+    // Optional multi-selection for bulk actions (e.g. delete several playlists).
+    // When provided, ⌘/⇧-click builds this set; a plain click clears it.
+    let multiSelection: Binding<Set<UUID>>?
+
     @State private var hoveredItemID: UUID?
     @State private var draggedItemID: UUID?
     @State private var dropTargetItemID: UUID?
+    @State private var trackDropTargetID: UUID?
 
     init(
         items: [Item],
@@ -38,7 +47,9 @@ struct SidebarListView<Item: SidebarItem>: View {
         showCount: Bool = false,
         trailingContent: ((Item) -> AnyView)? = nil,
         reorderableFromIndex: Int? = nil,
-        onReorder: (([Item]) -> Void)? = nil
+        onReorder: (([Item]) -> Void)? = nil,
+        onDropTracks: ((Item) -> Void)? = nil,
+        multiSelection: Binding<Set<UUID>>? = nil
     ) {
         self.items = items
         self._selectedItem = selectedItem
@@ -52,6 +63,8 @@ struct SidebarListView<Item: SidebarItem>: View {
         self.trailingContent = trailingContent
         self.reorderableFromIndex = reorderableFromIndex
         self.onReorder = onReorder
+        self.onDropTracks = onDropTracks
+        self.multiSelection = multiSelection
     }
 
     var body: some View {
@@ -97,7 +110,7 @@ struct SidebarListView<Item: SidebarItem>: View {
 
                     SidebarItemRow(
                         item: item,
-                        isSelected: selectedItem?.id == item.id,
+                        isSelected: isRowSelected(item),
                         isHovered: hoveredItemID == item.id,
                         showIcon: showIcon,
                         iconColor: iconColor,
@@ -134,6 +147,21 @@ struct SidebarListView<Item: SidebarItem>: View {
                                 onReorder: onReorder ?? { _ in }
                             )
                         )
+                    }
+                    .if(onDropTracks != nil) { view in
+                        view
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(Color.accentColor.opacity(trackDropTargetID == item.id ? 0.25 : 0))
+                            )
+                            .onDrop(of: [.chapariiTrackList], isTargeted: Binding(
+                                get: { trackDropTargetID == item.id },
+                                set: { trackDropTargetID = $0 ? item.id : nil }
+                            )) { _ in
+                                onDropTracks?(item)
+                                trackDropTargetID = nil
+                                return true
+                            }
                     }
                     .contextMenu {
                         if let menuItems = contextMenuItems?(item) {
@@ -207,8 +235,32 @@ struct SidebarListView<Item: SidebarItem>: View {
     }
 
     private func handleItemTap(_ item: Item) {
+        if let multi = multiSelection {
+            let flags = NSEvent.modifierFlags
+            if flags.contains(.command) {
+                if multi.wrappedValue.contains(item.id) {
+                    multi.wrappedValue.remove(item.id)
+                } else {
+                    multi.wrappedValue.insert(item.id)
+                }
+                return
+            } else if flags.contains(.shift),
+                      let anchorID = selectedItem?.id,
+                      let a = items.firstIndex(where: { $0.id == anchorID }),
+                      let b = items.firstIndex(where: { $0.id == item.id }) {
+                let range = a <= b ? a...b : b...a
+                multi.wrappedValue = Set(items[range].map { $0.id })
+                return
+            } else {
+                multi.wrappedValue = []   // plain click clears the bulk selection
+            }
+        }
         selectedItem = item
         onItemTap(item)
+    }
+
+    private func isRowSelected(_ item: Item) -> Bool {
+        selectedItem?.id == item.id || (multiSelection?.wrappedValue.contains(item.id) ?? false)
     }
 }
 

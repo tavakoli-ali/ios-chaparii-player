@@ -7,6 +7,8 @@ struct PlaylistSidebarView: View {
     @State private var selectedSidebarItem: PlaylistSidebarItem?
     @State private var playlistToDelete: Playlist?
     @State private var showingDeleteConfirmation = false
+    @State private var selectedForBulk: Set<UUID> = []
+    @State private var showingBulkDeleteConfirmation = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -33,6 +35,12 @@ struct PlaylistSidebarView: View {
             if let playlist = playlistToDelete {
                 Text("Are you sure you want to delete \"\(DefaultPlaylists.displayName(for: playlist))\"? This action cannot be undone.")
             }
+        }
+        .alert("Delete Playlists", isPresented: $showingBulkDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) { performBulkDelete() }
+        } message: {
+            Text("Are you sure you want to delete \(bulkDeletablePlaylists.count) playlists? This action cannot be undone.")
         }
         .onAppear {
             updateSelectedSidebarItem()
@@ -128,11 +136,43 @@ struct PlaylistSidebarView: View {
                 kebabMenu(for: item)
             },
             reorderableFromIndex: nonEditableCount,
-            // swiftlint:disable:next trailing_closure
             onReorder: { reorderedItems in
                 handlePlaylistReorder(reorderedItems)
-            }
+            },
+            onDropTracks: { item in
+                handleDropTracks(onto: item)
+            },
+            // swiftlint:disable:next trailing_closure
+            multiSelection: $selectedForBulk
         )
+        .onDeleteCommand {
+            if !bulkDeletablePlaylists.isEmpty { showingBulkDeleteConfirmation = true }
+        }
+    }
+
+    // MARK: - Bulk Delete
+
+    /// User-editable playlists among the current bulk selection (smart/default
+    /// playlists can't be deleted and are excluded).
+    private var bulkDeletablePlaylists: [Playlist] {
+        playlistManager.playlists.filter { selectedForBulk.contains($0.id) && $0.isUserEditable }
+    }
+
+    private func performBulkDelete() {
+        for playlist in bulkDeletablePlaylists {
+            playlistManager.deletePlaylist(playlist)
+            if selectedPlaylist?.id == playlist.id { selectedPlaylist = nil }
+        }
+        selectedForBulk = []
+    }
+
+    /// Adds the tracks dragged from the track list onto a regular playlist row.
+    private func handleDropTracks(onto item: PlaylistSidebarItem) {
+        guard item.playlist.type == .regular else { return }   // only user playlists accept drops
+        let tracks = TrackDragCoordinator.shared.take()
+        guard !tracks.isEmpty else { return }
+        let playlistID = item.playlist.id
+        Task { await playlistManager.addTracksToPlaylist(tracks: tracks, playlistID: playlistID) }
     }
 
     // MARK: - Kebab Menu
@@ -178,10 +218,25 @@ struct PlaylistSidebarView: View {
     /// context menu and the kebab menu so the two stay identical. Shared with the Home
     /// sidebar via `PlaylistMenuBuilder`.
     private func playlistMenuItems(for item: PlaylistSidebarItem) -> [ContextMenuItem] {
-        PlaylistMenuBuilder.items(for: item.playlist, playlistManager: playlistManager) {
+        var items = PlaylistMenuBuilder.items(for: item.playlist, playlistManager: playlistManager) {
             playlistToDelete = item.playlist
             showingDeleteConfirmation = true
         }
+        // When this row is part of a multi-selection of 2+ deletable playlists,
+        // offer a bulk remove at the top of its context menu.
+        if selectedForBulk.contains(item.id) {
+            let count = bulkDeletablePlaylists.count
+            if count >= 2 {
+                items.insert(.divider, at: 0)
+                items.insert(
+                    .button(title: String(localized: "Remove \(count) Playlists"), icon: Icons.trash, role: .destructive) {
+                        showingBulkDeleteConfirmation = true
+                    },
+                    at: 0
+                )
+            }
+        }
+        return items
     }
 }
 

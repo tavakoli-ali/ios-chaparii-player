@@ -23,6 +23,10 @@ final class MiniPlayerWindowManager: NSObject {
     private static let frameKey = "PetrichorMiniPlayerWindow"
 
     private var window: NSWindow?
+    /// True when opening the mini player hid the main window, so closing it should
+    /// bring the main window back. Guards the menubar case where the main window was
+    /// already hidden and must stay hidden.
+    private var didHideMainWindow = false
 
     override private init() {}
 
@@ -77,6 +81,13 @@ final class MiniPlayerWindowManager: NSObject {
 
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+
+        // Collapse into the mini player: hide the main window while it's open, and
+        // remember to restore it on close (but only if it was actually showing).
+        if let main = WindowManager.shared.mainWindow, main.isVisible {
+            main.orderOut(nil)
+            didHideMainWindow = true
+        }
     }
 
     /// Restores the saved global frame (origin encodes the display) when it's still
@@ -118,6 +129,13 @@ extension MiniPlayerWindowManager: NSWindowDelegate {
         // hosting view could leave a fine-progress-sampling consumer registered.
         (notification.object as? NSWindow)?.contentView = nil
         window = nil
+
+        // Restore the main window we hid when the mini player opened, so closing the
+        // mini player brings the full app back rather than leaving nothing on screen.
+        if didHideMainWindow {
+            didHideMainWindow = false
+            WindowManager.shared.mainWindow?.makeKeyAndOrderFront(nil)
+        }
     }
 }
 

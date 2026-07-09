@@ -591,9 +591,10 @@ struct PlayerView: View {
     private var currentTrackContextMenuItems: [ContextMenuItem] {
         guard let track = playbackManager.currentTrack else { return [] }
         
-        return TrackContextMenu.createPlayerViewMenuItems(
+        return TrackContextMenu.createMenuItems(
             for: track,
-            playlistManager: playlistManager
+            playlistManager: playlistManager,
+            currentContext: .library
         )
     }
 

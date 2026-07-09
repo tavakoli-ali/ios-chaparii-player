@@ -274,8 +274,30 @@ struct SpotifyDownloadSheet: View {
             query: query.trimmingCharacters(in: .whitespaces),
             destination: destination
         ) {
-            // New files appear once the scan picks up the destination folder
-            libraryManager.refreshLibrary()
+            // Make the freshly downloaded tracks appear on the page. A hard,
+            // targeted rescan of the library folder that contains the download
+            // guarantees pickup: the default soft refresh can skip a folder
+            // whose top-level mtime/hash heuristic doesn't flag a change.
+            if let folder = containingLibraryFolder(for: destination) {
+                libraryManager.refreshFolder(folder, hardRefresh: true)
+            } else {
+                // The chosen destination is outside every library folder, so a
+                // rescan can never surface the tracks — tell the user why.
+                NotificationManager.shared.addMessage(
+                    .warning,
+                    String(localized: "Downloaded to a folder outside your library, so the tracks won't appear. Choose a folder inside your music library.")
+                )
+            }
+        }
+    }
+
+    /// The library folder that `url` lives in (equal to it or a descendant), or
+    /// nil if the download landed outside every watched library folder.
+    private func containingLibraryFolder(for url: URL) -> Folder? {
+        let target = url.standardizedFileURL.path
+        return libraryManager.folders.first { folder in
+            let base = folder.url.standardizedFileURL.path
+            return target == base || target.hasPrefix(base.hasSuffix("/") ? base : base + "/")
         }
     }
 }

@@ -155,14 +155,14 @@
 				55F38A7E2DF8F2F30028843B /* Utilities */,
 				55F38A842DF8F2FE0028843B /* Resources */,
 			);
-			name = Petrichor;
+			name = "Chaparii-Player";
 			packageProductDependencies = (
 				55B0DEC02DE3A58400A41ED9 /* GRDB */,
 				55D673CE2E42CEA50095A358 /* Sparkle */,
 				552A583F2EC0629A00F6D8C0 /* SFBAudioEngine */,
 				552CE3E42FE3263900A5C93D /* Crescendo */,
 			);
-			productName = Petrichor;
+			productName = "Chaparii-Player";
 			productReference = 550F4A0E2DB45B1A005F794E /* Petrichor Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -357,11 +357,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/Petrichor.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 999;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = B53W6J5RWK;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
@@ -378,16 +378,17 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Configuration/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Petrichor;
+				INFOPLIST_KEY_CFBundleDisplayName = Chaparii;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Development Build";
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--timestamp";
-				PRODUCT_BUNDLE_IDENTIFIER = com.atavakoli.petrichor.debug;
-				PRODUCT_MODULE_NAME = Petrichor;
-				PRODUCT_NAME = "Petrichor Dev";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chaparii.player.debug;
+				PRODUCT_MODULE_NAME = Chaparii_Player;
+				PRODUCT_NAME = "Chaparii Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = macosx;
@@ -410,7 +411,7 @@
 				CURRENT_PROJECT_VERSION = 152;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = B53W6J5RWK;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
@@ -427,15 +428,15 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Configuration/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Petrichor;
+				INFOPLIST_KEY_CFBundleDisplayName = Chaparii;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = "Development Build";
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--timestamp";
-				PRODUCT_BUNDLE_IDENTIFIER = com.atavakoli.petrichor;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chaparii.player;
+				PRODUCT_NAME = "Chaparii";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;

@@ -84,7 +84,7 @@ class MenuBarManager: NSObject {
         // Use play/pause circle icons based on playback state
         let iconName = playbackManager.isPlaying ? Icons.playCircleFill : Icons.pauseCircleFill
 
-        if let image = NSImage(systemSymbolName: iconName, accessibilityDescription: "Petrichor") {
+        if let image = NSImage(systemSymbolName: iconName, accessibilityDescription: "Chaparii") {
             image.size = NSSize(width: 18, height: 18)
             image.isTemplate = true
             button.image = image

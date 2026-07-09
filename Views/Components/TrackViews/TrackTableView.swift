@@ -51,12 +51,33 @@ struct TrackTableView: View {
     
     private func isFavorite(_ track: Track) -> Bool {
         guard let trackId = track.trackId else { return track.isFavorite }
-        
+
         if let favorite = trackFavorites[trackId] {
             return favorite
         }
-        
+
         return track.isFavorite
+    }
+
+    /// Builds the drag payload at drag start: drags the whole multi-selection when
+    /// the grabbed row is part of it, otherwise just that row. The tracks are staged
+    /// in TrackDragCoordinator; the marker only carries the drag content type.
+    private func dragMarker(for track: Track) -> TrackDragMarker {
+        let dragged = (selection.contains(track.id) && selection.count > 1)
+            ? sortedTracks.filter { selection.contains($0.id) }
+            : [track]
+        return TrackDragCoordinator.shared.stage(dragged)
+    }
+
+    /// Delete-key handler: when this table is showing a regular playlist, remove the
+    /// selected tracks from it. No-op elsewhere (e.g. library/folder views).
+    private func removeSelectedFromPlaylist() {
+        guard let playlistID,
+              let playlist = playlistManager.playlists.first(where: { $0.id == playlistID }),
+              playlist.type == .regular else { return }
+        let toRemove = sortedTracks.filter { selection.contains($0.id) }
+        guard !toRemove.isEmpty else { return }
+        Task { await playlistManager.removeTracksFromPlaylist(tracks: toRemove, playlistID: playlistID) }
     }
     
     var body: some View {
@@ -74,6 +95,7 @@ struct TrackTableView: View {
                     handleDoubleTap(on: track)
                 }
             }
+            .onDeleteCommand(perform: removeSelectedFromPlaylist)
             .onChange(of: columnCustomization) { _, newValue in
                 if hasInitializedCustomization {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -206,6 +228,7 @@ struct TrackTableView: View {
                         handlePlayTrack: handlePlayTrack
                     ) { playbackManager.togglePlayPause() }
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .draggable(dragMarker(for: track))
                 }
                 .width(min: 200)
                 .customizationID("title")
