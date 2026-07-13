@@ -123,3 +123,11 @@ Configuration/Secrets.xcconfig
 # Known artists data file (bundled in release builds, generated from MusicBrainz)
 Resources/known_artists_20??????.txt
 
+
+# HiBy music library (large media, not versioned)
+/HiBy_R1_Music/
+.claude/tools/venv/
+.claude/tools/__pycache__/
+.claude/tools/*_manifest.json
+.claude/tools/download_queue.json
+.claude/tools/download.log
