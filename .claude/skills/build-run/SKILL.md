@@ -1,6 +1,6 @@
 ---
 name: build-run
-description: Build and launch the Chaparii (hiby-fork) macOS app. Use whenever asked to build, compile, run, launch, or open the macOS app, or to verify a change compiles/works in the real macOS app. For the iPhone/iPad app use the build-run-ios skill instead.
+description: Build and launch the Chaparii macOS app. Use whenever asked to build, compile, run, launch, or open the macOS app, or to verify a change compiles/works in the real macOS app. For the iPhone/iPad app use the build-run-ios skill instead.
 ---
 
 # Build & run Chaparii (macOS)

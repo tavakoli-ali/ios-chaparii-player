@@ -4,8 +4,9 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-**Chaparii** — a personal music player, forked from **Petrichor** (MIT, `kushalpandya/Petrichor`)
-on branch `hiby-fork`. GitHub: `tavakoli-ali/ios-chaparii-player`. It plays the `HiBy_R1_Music`
+**Chaparii** — a personal music player based on **Petrichor** (MIT, `kushalpandya/Petrichor`).
+GitHub: `tavakoli-ali/ios-chaparii-player` (default branch `develop`; a standalone repo, not a
+GitHub fork). It plays the `HiBy_R1_Music`
 library (`/Users/atavakoli/Downloads/HiBy_R1_Music`, ~1,400 tracks in language subfolders +
 `.m3u8` playlists) synced to a HiBy R1 DAP.
 
