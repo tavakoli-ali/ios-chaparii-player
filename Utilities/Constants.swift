@@ -93,14 +93,13 @@ enum Icons {
 // MARK: - About
 
 enum About {
-    static let bundleIdentifier = "org.Petrichor"
+    static let bundleIdentifier = "com.chaparii.player"
     static let appTitle = "Chaparii"
     static let appSubtitle = "An offline macOS music player"
-    static let appWebsite = "https://github.com/kushalpandya/Petrichor"
-    static let appWiki = "https://github.com/kushalpandya/Petrichor/wiki"
-    static let reportIssue = "https://github.com/kushalpandya/Petrichor/issues/new/choose"
-    static let appAcknowledgements = "https://github.com/kushalpandya/Petrichor/blob/main/ACKNOWLEDGEMENTS.md"
-    static let sponsor = "https://github.com/sponsors/kushalpandya"
+    static let appWebsite = "https://github.com/tavakoli-ali/ios-chaparii-player"
+    static let appWiki = "https://github.com/tavakoli-ali/ios-chaparii-player#readme"
+    static let reportIssue = "https://github.com/tavakoli-ali/ios-chaparii-player/issues/new/choose"
+    static let appAcknowledgements = "https://github.com/tavakoli-ali/ios-chaparii-player/blob/HEAD/ACKNOWLEDGEMENTS.md"
     static let appVersion = "1.5.2"
     static let appBuild = "152"
     static let knownArtistsSampleFile = "known_artists_YYYYMMDD.txt"

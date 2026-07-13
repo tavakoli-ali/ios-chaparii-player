@@ -1,142 +1,77 @@
-<img width="170" src=".github/assets/DefaultAppIcon.png" alt="Petrichor App Icon" align="left"/>
+<img width="170" src=".github/assets/DefaultAppIcon.png" alt="Chaparii App Icon" align="left"/>
 
 <div>
-<h3>Petrichor</h3>
-<p>An offline music player for macOS</p>
-<a href="https://github.com/kushalpandya/Petrichor/releases/latest"><img src=".github/assets/macos_download.png" width="140" alt="Download for macOS"/></a>
+<h3>Chaparii</h3>
+<p>A personal offline music player for macOS & iOS</p>
 </div>
 
 <br/><br/>
 
 <div align="center">
-<a href="https://github.com/kushalpandya/Petrichor/releases"><img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/kushalpandya/Petrichor/total?label=Downloads&style=flat-square&color=ba68c8"></a>
-<a href="https://github.com/kushalpandya/Petrichor/actions/workflows/ci.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/kushalpandya/Petrichor/ci.yml?label=CI&style=flat-square"></a>
-<a href="https://github.com/kushalpandya/Petrichor/blob/main/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/kushalpandya/Petrichor?label=License&style=flat-square&color=ffa726"></a>
-<a href="https://github.com/kushalpandya/Petrichor/"><img src="https://img.shields.io/badge/platform-macOS-blue.svg?label=Platform&style=flat-square&logo=apple" alt="Platform"/></a>
-<br/>
-<br/>
-<a href="https://github.com/kushalpandya/Petrichor/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/kushalpandya/Petrichor?display_name=release&style=flat-square&label=Latest%20Release&color=26a69a"></a>
-
-<br/>
-<br/>
-
-<img src=".github/assets/hero_screenshot.png" width="824" alt="Screenshot"/><br/>
-
+<a href="https://github.com/tavakoli-ali/ios-chaparii-player/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/tavakoli-ali/ios-chaparii-player/ci.yml?label=CI&style=flat-square"></a>
+<a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-ffa726?style=flat-square"></a>
+<img src="https://img.shields.io/badge/platform-macOS%20%7C%20iOS-blue.svg?label=Platform&style=flat-square&logo=apple" alt="Platform"/>
 </div>
 
 ---
 
 ## Summary
 
+**Chaparii** is a personal music player built on top of
+[**Petrichor**](https://github.com/kushalpandya/Petrichor) (MIT). It plays my
+`HiBy_R1_Music` library — roughly 1,400 tracks organized into language subfolders
+with `.m3u8` playlists — synced to a HiBy R1 DAP, and runs on both macOS and iOS.
+
+This is a personal project, not a general-purpose release: it's tuned for my own
+library and workflow rather than distributed to end users.
+
+### 🎵 Two apps, one shared core
+
+- **macOS** (`Chaparii-Player`) — the full SwiftUI + AppKit app: browse, playlists,
+  search, now-playing, favorites, tag editing, online tag lookup, and Spotify
+  downloads via a bundled `spotdl`.
+- **iOS / iPadOS** (`Chaparii-iOS`) — a deliberately trimmed companion: browse
+  (Artist / Album / Genre / Folders), playlists, search, now-playing, favorites, and
+  playback resume. **No tag editing, online lookup, or downloads.** Audio is ingested
+  via iTunes File Sharing (copy audio + `.m3u8` into the app's Documents folder).
+
+Both share `Models/` (GRDB records), `Managers/` (library/playlist/playback logic),
+and `Core/` (metadata + playback engine). GRDB is the cross-platform library database.
+
 ### ✨ Features
 
-- Everything you'd expect from an offline music player!
-- Supports wide variety of audio file formats;
-  - MP3, AAC/M4A, WAV, AIFF, AIF, ALAC
-  - Ogg Vorbis, Speex, Opus, and FLAC
-  - APE (Monkey's Audio)
-  - MPC (Musepack)
-  - TTA (True Audio)
-  - WV (WavPack)
-  - DSF/DFF (Direct Stream Digital)
-  - ... MOD, IT, S3M, XM, and AU
-- Map your music folders and browse your library in an organized view.
-- Show lyrics of a playing track when available, including ability to download missing lyrics.
-- Create, import or export playlists.
-- Manage the play queue interactively using drag and drop
-- Browse music using folder view when needed.
-- Pin _anything_ (almost!) to the sidebar for quick access to your favorite music.
-- Navigate easily: right-click a track to go to its album, artist, year, etc.
-- Native macOS integration with menubar and dock playback controls, plus dark mode support.
-- Works well with large libraries containing thousands of songs.
-- Last.fm scrobbling support
+- Wide audio format support: MP3, AAC/M4A, WAV, AIFF, ALAC, Ogg Vorbis, Speex, Opus,
+  FLAC, APE, MPC, TTA, WavPack, DSF/DFF, plus MOD/IT/S3M/XM and AU.
+- Map music folders and browse an organized library view.
+- Create, import, and export playlists (including `.m3u8` auto-import on iOS).
+- Folder-tree browsing, favorites, and go-to-artist / go-to-album navigation.
+- Native macOS menubar and dock playback controls, plus dark mode.
+- Handles large libraries with thousands of tracks; duplicate detection surfaces only
+  the best copy of each track.
 
-💡 **Tip**: Petrichor relies heavily on tracks having good metadata for all its features to work well.
+💡 **Tip**: Chaparii relies on tracks having good metadata for its features to work well.
 
-### ⌛ Upcoming Features
+### Requirements
 
-- ~~Automatic in-app updates~~ (✅ [v1.0.0](https://github.com/kushalpandya/Petrichor/releases/tag/v1.0.0) )
-- ~~Better file format support (eg; Opus & OGG)~~ (✅ [v.1.2.0](https://github.com/kushalpandya/Petrichor/releases/tag/v1.2.0))
-- ~~Audio Equalizer~~ (✅ [v.1.2.0](https://github.com/kushalpandya/Petrichor/releases/tag/v1.2.0))
-- AirPlay 2 casting support
-- Miniplayer and full-screen modes
-- Smart playlists with user-configurable conditional filters
-- Online album & artist information fetching
-- ... and much more!
-
-###  Requirements
-
-- macOS 14 or later
-
-### ⚙️ Installation
-
-#### Manually
-
-- Go to [Releases](https://github.com/kushalpandya/Petrichor/releases) and download the latest `.dmg`.
-- Open the it and drag the app icon into the Applications folder.
-- In Applications, right-click **Petrichor > Open**.
-
-#### Homebrew
-
-```
-brew install --cask petrichor
-```
-
-### 🚀 Get Started
-
-[Petrichor User Guide](https://github.com/kushalpandya/Petrichor/wiki)
-
-### 📷 Screenshots
-
-**Note:** These may not be up-to-date.
-
-<div align="center">
-<img src=".github/assets/screenshot_1.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_2.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_3.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_4.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_5.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_6.png" width="392" alt="Screenshot"/>
-<img src=".github/assets/screenshot_7.png" width="392" alt="Screenshot"/>
-</div>
-
-### 🔒 Privacy & Data Access
-
-- Petrichor is sandboxed and notarized by Apple.
-- It has two permissions on macOS as follows;
-  - **Read-write access**
-    - To read and write into user-selected files and folders,
-      write access is only used for exporting M3U playlist files.
-  - **Network access**
-    - To check for and install app updates.
-    - Fetch artist images and bios from online sources (disabled by default)
-    - Download track lyrics from the internet (disabled by default)
-    - Last.fm scrobbling (disabled by default)
-        - When enabled, app may ask to store your Last.fm session information in macOS Keychain, if you choose to allow it, macOS will ask for your user account password to store the information in Keychain.
-        - App **does not** store your Last.fm username or password, you still have to provide it on Last.fm website that opens in browser during configuration, once done, app only receives a session key to scrobble track playbacks with your account.
-- It doesn't (and never will) have any analytics on how you use the app.
-- It never changes your audio files or folder structure in any way.
-- Your library data remains offline always.
+- **macOS 14** or later
+- **iOS 17** or later (simulator or device)
 
 ## 🏗️ Development
 
-### Motivation
+### Implementation overview
 
-I have a large collection of music files that I’ve gathered over the years, and I missed having a good offline
-music player on macOS. I've used several free and paid options but I missed the simplicity and features commonly
-found in streaming apps; so I built Petrichor to scratch that itch and learn Swift and macOS app development
-along the way!
+- Built with Swift and SwiftUI, with AppKit on macOS for native integration.
+- On first run the app scans mapped folders, extracts metadata, and populates an
+  SQLite database. It **never** alters your audio files — it only reads them.
+- Track search uses [SQLite FTS5](https://www.sqlite.org/fts5.html).
+- Playback runs through the [SFBAudioEngine](https://github.com/sbooth/SFBAudioEngine)
+  backend (`MediaBackend.current`), with a macOS-only alternate backend.
 
-### Implementation Overview
-
-- Built with Swift and SwiftUI with some parts in AppKit for the best macOS integration.
-- Once folders containing music files are added, the app scans them, extracts required metadata, and populates the SQLite database.
-- The app does **not** alter your music files, it only reads from the directories you add.
-- Tracks searching is handled by [SQLite FTS5](https://www.sqlite.org/fts5.html).
-- Playback is handled by [AVFoundation](https://developer.apple.com/av-foundation/) and third-party audio decoders.
+See [`CLAUDE.md`](CLAUDE.md) for the full build/run flow, cross-platform structure, and
+fork-specific gotchas, and [`docs/iOS-plan.md`](docs/iOS-plan.md) for the iOS scope.
 
 <details>
-<summary>View Database Schema</summary>
+<summary>View database schema</summary>
 
 ```mermaid
 erDiagram
@@ -340,42 +275,28 @@ erDiagram
 
 </details>
 
-### Credits
+### Development setup
 
-Petrichor wouldn't be possible without following open source projects!
+- macOS 14 or later, with [Xcode](https://developer.apple.com/xcode/) installed.
+- Clone the repository and open `Chaparii-Player.xcodeproj`.
+- Build the `Chaparii-Player` (macOS) or `Chaparii-iOS` scheme — see
+  [`CLAUDE.md`](CLAUDE.md) for exact `xcodebuild` commands.
+
+## Credits
+
+Chaparii is a fork of [**Petrichor**](https://github.com/kushalpandya/Petrichor) by
+Kushal Pandya, and stands on these open-source projects:
 
 - [SFBAudioEngine](https://github.com/sbooth/SFBAudioEngine)
 - [GRDB.swift](https://github.com/groue/GRDB.swift/)
 - [Sparkle](https://github.com/sparkle-project/Sparkle)
-
-### Development Setup
-
-- Make sure you’re running macOS 14 or later.
-- Install [Xcode](https://developer.apple.com/xcode/).
-- Clone the repository and open `Petrichor.xcodeproj`
-
-#### Build & Release
-
-You can build your own `.dmg` installer using the [`build-installer.sh`](Scripts/build-installer.sh) script,
-although it requires you to have a paid Apple Developer account to notarize the compiled binary and installer,
-you can use `--bypass-notary` option if you don't want to notarize. To use the script, make sure you have
-following tools installed along with Xcode;
-
-- [xcpretty](https://github.com/xcpretty/xcpretty)
-- [create-dmg](https://github.com/sindresorhus/create-dmg)
-
-## 💖 Sponsors
-
-Thank you to all the sponsors for supporting Petrichor's development!
-
-<p align="center">
-  <img src=".github/assets/sponsors.svg" alt="Sponsors" />
-</p>
+- [spotDL](https://github.com/spotDL/spotify-downloader) (macOS downloads)
 
 ## 📝 License
 
-- Petrichor is licensed under [MIT](LICENSE)
-- Core dependencies (SFBAudioEngine, GRDB, Sparkle) are licensed under MIT
-- Audio codec libraries (FLAC, Vorbis, Opus, etc.) are dynamically linked and use various open source licenses including GPL and LGPL
+- Chaparii and Petrichor are licensed under [MIT](LICENSE).
+- Core dependencies (SFBAudioEngine, GRDB, Sparkle) are licensed under MIT.
+- Audio codec libraries (FLAC, Vorbis, Opus, etc.) are dynamically linked and use
+  various open-source licenses including GPL and LGPL.
 
-For complete third-party license information, see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md)
+For complete third-party license information, see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).

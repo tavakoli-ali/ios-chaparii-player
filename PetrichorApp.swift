@@ -659,7 +659,6 @@ extension PetrichorApp {
     private func helpMenuCommands() -> some Commands {
         CommandGroup(replacing: .help) {
             projectHomepageMenuItem()
-            sponsorProjectMenuItem()
             Divider()
             helpMenuItem()
             reportProblemMenuItem()
@@ -698,23 +697,6 @@ extension PetrichorApp {
         }
     }
     
-    private func sponsorProjectMenuItem() -> some View {
-        Button {
-            if let url = URL(string: About.sponsor) {
-                NSWorkspace.shared.open(url)
-            }
-        } label: {
-            if #available(macOS 26.0, *) {
-                Label(
-                    "Support Development",
-                    systemImage: "dollarsign.circle"
-                )
-            } else {
-                Text("Support Development")
-            }
-        }
-    }
-    
     private func helpMenuItem() -> some View {
         Button {
             if let url = URL(string: About.appWiki) {
@@ -723,7 +705,7 @@ extension PetrichorApp {
         } label: {
             if #available(macOS 26.0, *) {
                 Label(
-                    "Petrichor User Guide",
+                    "Chaparii User Guide",
                     systemImage: "book.pages"
                 )
             } else {
